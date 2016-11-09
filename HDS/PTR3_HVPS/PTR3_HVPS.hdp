@@ -1,0 +1,17 @@
+[DesignChecker]
+PTR3_HVPS_lib = $HDS_PROJECT_DIR\PTR3_HVPS_lib\designcheck
+[hdl]
+PTR3_HVPS_lib = $HDS_PROJECT_DIR/PTR3_HVPS_lib/hdl
+[hdl_vm]
+PTR3_HVPS_lib = https://forge.abcd.harvard.edu/svn/arp-eos/trunk/HDS/PTR3_HVPS_lib
+[hdl_ws]
+PTR3_HVPS_lib = $HDS_PROJECT_DIR
+[hds]
+PTR3_HVPS_lib = $HDS_PROJECT_DIR/PTR3_HVPS_lib/hds
+[hds_settings]
+default_library = PTR3_HVPS_lib
+version = 2
+[library_type]
+PTR3_HVPS_lib = regular
+[shared]
+others = $HDS_TEAM_HOME/shared.hdp
