@@ -1,5 +1,7 @@
 [DesignChecker]
-PTR3_HVPS_lib = $HDS_PROJECT_DIR\PTR3_HVPS_lib\designcheck
+PTR3_HVPS_lib = $HDS_PROJECT_DIR/PTR3_HVPS_lib/designcheck
+[ModelSim]
+PTR3_HVPS_lib = $HDS_PROJECT_DIR\PTR3_HVPS_lib\work
 [hdl]
 PTR3_HVPS_lib = $HDS_PROJECT_DIR/PTR3_HVPS_lib/hdl
 [hdl_vm]
