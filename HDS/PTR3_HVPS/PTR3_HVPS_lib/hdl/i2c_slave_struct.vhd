@@ -13,6 +13,11 @@
 -- For writing to the slave, once the serialized data is received,
 -- it is presented on wdata and the WE output is asserted.
 --
+-- The start and stop outputs simply identify the bit-level I2C
+-- states, and are present primarily for diagnostic purposes.
+--
+-- 
+--
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 USE ieee.std_logic_arith.all;
@@ -30,6 +35,7 @@ ENTITY i2c_slave IS
       start : OUT    std_ulogic;
       stop  : OUT    std_ulogic;
       wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
+      rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
       sda   : INOUT  std_logic
    );
@@ -80,6 +86,7 @@ ARCHITECTURE struct OF i2c_slave IS
       stop  : IN     std_ulogic ;
       WE    : OUT    std_logic ;
       wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
+      rdreq : OUT    std_logic;
       RE    : INOUT  std_logic ;
       sda   : INOUT  std_logic 
    );
@@ -115,6 +122,7 @@ BEGIN
          stop  => stop_internal,
          WE    => WE,
          wdata => wdata,
+         rdreq => rdreq,
          RE    => RE,
          sda   => sda
       );

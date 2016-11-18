@@ -45,6 +45,26 @@ END HVPS_txn_tester ;
 ARCHITECTURE rtl OF HVPS_txn_tester IS
   SIGNAL clk_100MHz : std_logic;
   SIGNAL SimDone : std_logic;
+  
+  SIGNAL TestSLV : std_logic_vector(15 DOWNTO 0);
+  
+  pure function int2slv(val : IN integer; len : IN integer)
+  return std_logic_vector is
+    Variable bit : integer := 0;
+    Variable rval : integer := val;
+    Variable slv : std_logic_vector(len-1 DOWNTO 0) := (others => '0');
+  begin
+    while bit < len loop
+      if rval mod 2 > 0 then
+        slv(bit) := '1';
+      else
+        slv(bit) := '0';
+      end if;
+      rval := rval / 2;
+      bit := bit + 1;
+    end loop;
+    return slv;
+  end function int2slv;
 BEGIN
   f100m_clk : Process is
   Begin
@@ -118,11 +138,15 @@ BEGIN
       report "Expected Err on bad I2C addr"
       severity error;
 
+    TestSLV <= int2slv(55, 16);
+
     process_txn('1','0','1','0', GOOD_I2C_ADDR & '0');
     assert Done = '1' AND Err = '0'
       report "Expected Done on good I2C addr"
       severity error;
-      
+    
+    TestSLV <= int2slv(170, 16);
+    
     process_txn('1','0','0','1', X"55");
     assert Done = '1' AND Err = '0'
       report "Expected Done on good I2C addr"

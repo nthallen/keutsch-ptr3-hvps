@@ -24,6 +24,7 @@ ENTITY i2c_slave_bits IS
       stop  : IN     std_ulogic;
       WE    : OUT    std_logic;
       wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
+      rdreq : OUT    std_logic;
       RE    : INOUT  std_logic;
       sda   : INOUT  std_logic
    );
@@ -104,6 +105,7 @@ BEGIN
             nb <= (others => '0');
             rval <= X"55";
             sr <= (others => '0');
+            rdreq <= '0';
          ELSE
             current_state <= next_state;
 
@@ -123,6 +125,7 @@ BEGIN
                   END IF;
                WHEN i2cs_addr2 => 
                   addd <= '1';
+                  rdreq <= sr(0);
                WHEN i2cs_addr3 => 
                   IF (sclq = '0' and
                       (addd = '0' or sr(0) ='0')) THEN 
@@ -151,7 +154,8 @@ BEGIN
                   IF (sclq = '0') THEN 
                      nb <= "0000";
                   END IF;
-               WHEN i2cs_r => 
+               WHEN i2cs_r =>
+                  rdreq <= '0';
                   IF (RE /= '1') THEN 
                      sr <= CONV_STD_LOGIC_VECTOR(rval,8);
                      rval <= rval+1;
@@ -171,6 +175,10 @@ BEGIN
                            nb /= conv_unsigned(8,4)) THEN 
                      sr(7 downto 1) <=
                        sr(6 downto 0);
+                  END IF;
+               WHEN i2cs_r3 =>
+                  IF (sclq = '1' AND sdaq = '0') THEN
+                    rdreq <= '1';
                   END IF;
                WHEN i2cs_r5 => 
                   IF (start = '1') THEN 

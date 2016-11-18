@@ -1,0 +1,2 @@
+DEFAULT_ARCHITECTURE atom sim
+DEFAULT_FILE atom ad5693_sim.vhdl
