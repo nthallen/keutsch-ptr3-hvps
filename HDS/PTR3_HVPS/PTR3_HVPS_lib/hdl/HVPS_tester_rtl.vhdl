@@ -14,10 +14,13 @@ LIBRARY PTR3_HVPS_lib;
 USE PTR3_HVPS_lib.ALL;
 
 ENTITY HVPS_tester IS
+   GENERIC( 
+      ADDR_WIDTH : integer range 16 DOWNTO 8 := 16
+   );
    PORT( 
       ExpAck  : IN     std_ulogic;
       rData   : IN     std_logic_vector (15 DOWNTO 0);
-      ExpAddr : OUT    std_logic_vector (15 DOWNTO 0);
+      ExpAddr : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
       ExpRd   : OUT    std_ulogic;
       ExpWr   : OUT    std_ulogic;
       clk     : OUT    std_ulogic;
@@ -52,6 +55,7 @@ ARCHITECTURE rtl OF HVPS_tester IS
   SIGNAL m8_scl : std_logic_vector(4 DOWNTO 0);
   SIGNAL m8_sda : std_logic_vector(4 DOWNTO 0);
   SIGNAL dummy : std_logic;
+  SIGNAL ReadData : std_logic_vector(15 DOWNTO 0);
   
   COMPONENT i2c_ext_switch
      GENERIC (
@@ -440,6 +444,69 @@ BEGIN
 
      
   test_proc: PROCESS IS
+    -- This sbwr is at the subbus_io component level, not the syscon level
+    procedure sbwr(
+        addr : IN std_logic_vector(15 DOWNTO 0);
+        data : IN std_logic_vector(15 DOWNTO 0);
+        AckExpected : std_logic ) is
+    begin
+      ExpAddr <= addr(ADDR_WIDTH-1 DOWNTO 0);
+      wData <= data;
+      -- pragma synthesis_off
+      wait until clk_100MHz'EVENT AND clk_100MHz = '1';
+      ExpWr <= '1';
+      for i in 1 to 8 loop
+        wait until clk_100MHz'EVENT AND clk_100MHz = '1';
+      end loop;
+      if AckExpected = '1' then
+        assert ExpAck = '1' report "Expected Ack" severity error;
+      else
+        assert ExpAck = '0' report "Expected no Ack" severity error;
+      end if;
+      ExpWr <= '0';
+      wait until clk_100MHz'EVENT AND clk_100MHz = '1';
+      -- pragma synthesis_on
+      return;
+    end procedure sbwr;
+    
+    procedure sbrd(
+        addr : IN std_logic_vector(15 DOWNTO 0) ) is
+    begin
+      ExpAddr <= addr(ADDR_WIDTH-1 DOWNTO 0);
+      -- pragma synthesis_off
+      wait until clk_100MHz'EVENT AND clk_100MHz = '1';
+      ExpRd <= '1';
+      for i in 1 to 8 loop
+        wait until clk_100MHz'EVENT AND clk_100MHz = '1';
+      end loop;
+      assert ExpAck = '1' report "Expected Ack on sbrd" severity error;
+      ReadData <= rData;
+      ExpRd <= '0';
+      wait until clk_100MHz'EVENT AND clk_100MHz = '1';
+      -- pragma synthesis_on
+      return;
+    end procedure sbrd;
+  
+    function int2slv(val : IN integer; len : IN integer)
+    return std_logic_vector is
+      Variable bit : integer range 0 to 16;
+      Variable rval : integer range 0 to 65535;
+      Variable slv : std_logic_vector(len-1 DOWNTO 0);
+    begin
+      bit := 0;
+      rval := val;
+      slv := (others => '0');
+      while bit < len loop
+        if rval mod 2 > 0 then
+          slv(bit) := '1';
+        else
+          slv(bit) := '0';
+        end if;
+        rval := rval / 2;
+        bit := bit + 1;
+      end loop;
+      return slv;
+    end function int2slv;
   BEGIN
     ExpAddr <= (others => '0');
     wData <= (others => '0');
@@ -469,6 +536,12 @@ BEGIN
     wait until clk_100MHz'EVENT AND clk_100MHz = '1';
     wait until clk_100MHz'EVENT AND clk_100MHz = '1';
     rst <= '0';
+    wait for 5 ms;
+    sbrd(X"0034");
+    sbwr(X"0034",X"1234",'1');
+    wait for 100 ms;
+    sbrd(X"0034");
+    assert ReadData = X"1234" report "Readback failed" severity error;
     wait for 100 ms;
 
     SimDone <= '1';

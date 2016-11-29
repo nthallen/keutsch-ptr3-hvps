@@ -48,13 +48,14 @@ USE ieee.std_logic_unsigned.all;
 
 ENTITY dpram IS
    GENERIC( 
+      ADDR_WIDTH : integer range 16 downto 8 := 16;
       MEM_SIZE  : integer := 16;
       WORD_SIZE : integer := 16
    );
    PORT( 
-      RdAddr : IN     std_logic_vector (15 DOWNTO 0);
+      RdAddr : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
       RdEn   : IN     std_logic;
-      WrAddr : IN     std_logic_vector (15 DOWNTO 0);
+      WrAddr : IN     std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
       WrEn   : IN     std_logic;
       clk    : IN     std_ulogic;
       rst    : IN     std_ulogic;
@@ -72,7 +73,7 @@ ARCHITECTURE beh OF dpram IS
    type Data_t is array (MEM_SIZE-1 DOWNTO 0) of std_logic_vector(WORD_SIZE-1 DOWNTO 0);
    SIGNAL Data : Data_t;
    SIGNAL WrRdy_int : std_logic;
-   SIGNAL WAddr_save : std_logic_vector (15 DOWNTO 0);
+   SIGNAL WAddr_save : std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
    SIGNAL WData_save : std_logic_vector (WORD_SIZE-1 DOWNTO 0);
 BEGIN
   dpram_fsm : PROCESS (clk) IS

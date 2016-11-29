@@ -183,7 +183,7 @@ BEGIN
             END IF;
             IF (start = '1') THEN
               crnt_state <= S_START;
-            ELSIF (WE = '0') THEN
+            ELSIF (WE = '1') THEN
               crnt_state <= S_WR;
             ELSE
               crnt_state <= S_WR_1;

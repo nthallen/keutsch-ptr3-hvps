@@ -20,8 +20,9 @@ USE ieee.std_logic_unsigned.all;
 
 ENTITY HVPS_acq IS
    GENERIC( 
-      WORD_SIZE  : integer := 16;
-      N_CHANNELS : integer := 14
+      ADDR_WIDTH : integer range 16 downto 8 := 16;
+      WORD_SIZE  : integer                   := 16;
+      N_CHANNELS : integer                   := 14
    );
    PORT( 
       ChanAddr2 : IN     std_logic_vector (3 DOWNTO 0);
@@ -38,7 +39,7 @@ ENTITY HVPS_acq IS
       Stop      : OUT    std_logic;
       Wr        : OUT    std_logic;
       WrAck2    : OUT    std_logic;
-      WrAddr1   : OUT    std_logic_vector (15 DOWNTO 0);
+      WrAddr1   : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
       WrEn1     : OUT    std_logic;
       i2c_wdata : OUT    std_logic_vector (7 DOWNTO 0);
       wData1    : OUT    std_logic_vector (15 DOWNTO 0);
@@ -201,7 +202,7 @@ BEGIN
       nxt : IN State1_t ) IS
     BEGIN
       WrEn1 <= '1';
-      WrAddr1 <= int2slv(Addr,16);
+      WrAddr1 <= int2slv(Addr,ADDR_WIDTH);
       wData1 <= wData;
       ram_nxt <= nxt;
       crnt_state1 <= S1_RAM;
@@ -532,11 +533,13 @@ BEGIN
           WHEN S1_LOOP_DAC =>
             err_recovery_nxt <= S1_LOOP1_ITER;
             IF WrEn2 = '1' AND ChanAddr2 = Chan THEN
+              WrAck2 <= '1';
               start_dac_wr(WData2, S1_LOOP_DAC_1);
             ELSE
               start_dac_rd(S1_LOOP_DAC_2);
             END IF;
           WHEN S1_LOOP_DAC_1 =>
+            WrAck2 <= '0';
             start_ram(conv_integer(Chan)*4+DAC_SETPOINT_OFFSET,WData2,S1_LOOP1_ITER);
           WHEN S1_LOOP_DAC_2 =>
             start_ram(conv_integer(Chan)*4+DAC_READBACK_OFFSET,RData,S1_LOOP1_ITER);
