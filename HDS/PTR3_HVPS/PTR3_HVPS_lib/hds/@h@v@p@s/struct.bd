@@ -57,7 +57,7 @@ elements [
 (GiElement
 name "I2C_CLK_PRESCALE"
 type "std_logic_vector (15 DOWNTO 0)"
-value "X\"000E\""
+value "X\"00BC\""
 )
 ]
 mwi 0
@@ -183,19 +183,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\PTR3S\\PTR3_HVPS\\HDS\\PTR3_HVPS\\PT
 )
 (vvPair
 variable "date"
-value "11/29/2016"
+value "11/30/2016"
 )
 (vvPair
 variable "day"
-value "Tue"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Tuesday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "29"
+value "30"
 )
 (vvPair
 variable "entity_name"
@@ -223,7 +223,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/29/16"
+value "11/30/16"
 )
 (vvPair
 variable "graphical_source_group"
@@ -231,7 +231,7 @@ value "Domain Users"
 )
 (vvPair
 variable "graphical_source_time"
-value "13:01:38"
+value "15:25:01"
 )
 (vvPair
 variable "group"
@@ -335,7 +335,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "13:03:23"
+value "15:27:37"
 )
 (vvPair
 variable "unit"
@@ -706,8 +706,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,5200,34500,6000"
-st "rst       : std_ulogic
-"
+st "rst       : std_ulogic"
 )
 )
 *13 (Net
@@ -725,8 +724,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,8400,34000,9200"
-st "scl       : std_logic
-"
+st "scl       : std_logic"
 )
 )
 *14 (Net
@@ -744,8 +742,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,9200,34000,10000"
-st "sda       : std_logic
-"
+st "sda       : std_logic"
 )
 )
 *15 (Net
@@ -763,8 +760,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,29400,37500,30200"
-st "SIGNAL wb_ack_o  : std_logic
-"
+st "SIGNAL wb_ack_o  : std_logic"
 )
 )
 *16 (Net
@@ -783,8 +779,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,30200,47500,31000"
-st "SIGNAL wb_adr_i  : std_logic_vector(2 DOWNTO 0)
-"
+st "SIGNAL wb_adr_i  : std_logic_vector(2 DOWNTO 0)"
 )
 )
 *17 (Net
@@ -802,8 +797,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,31000,37500,31800"
-st "SIGNAL wb_cyc_i  : std_logic
-"
+st "SIGNAL wb_cyc_i  : std_logic"
 )
 )
 *18 (Net
@@ -822,8 +816,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,31800,47500,32600"
-st "SIGNAL wb_dat_i  : std_logic_vector(7 DOWNTO 0)
-"
+st "SIGNAL wb_dat_i  : std_logic_vector(7 DOWNTO 0)"
 )
 )
 *19 (Net
@@ -842,8 +835,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,32600,47500,33400"
-st "SIGNAL wb_dat_o  : std_logic_vector(7 DOWNTO 0)
-"
+st "SIGNAL wb_dat_o  : std_logic_vector(7 DOWNTO 0)"
 )
 )
 *20 (Net
@@ -861,8 +853,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,33400,37500,34200"
-st "SIGNAL wb_inta_o : std_logic
-"
+st "SIGNAL wb_inta_o : std_logic"
 )
 )
 *21 (Net
@@ -880,8 +871,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,34200,37500,35000"
-st "SIGNAL wb_stb_i  : std_logic
-"
+st "SIGNAL wb_stb_i  : std_logic"
 )
 )
 *22 (Net
@@ -899,8 +889,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,35000,37500,35800"
-st "SIGNAL wb_we_i   : std_logic
-"
+st "SIGNAL wb_we_i   : std_logic"
 )
 )
 *23 (Net
@@ -918,8 +907,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,4400,34500,5200"
-st "clk       : std_ulogic
-"
+st "clk       : std_ulogic"
 )
 )
 *24 (PortIoInOut
@@ -1069,8 +1057,7 @@ font "Courier New,8,0"
 xt "59700,56500,90700,58900"
 st "ADDR_WIDTH = ADDR_WIDTH    ( integer range 16 downto 8 )  
 WORD_SIZE  = 16            ( integer                   )  
-N_CHANNELS = N_CHANNELS    ( integer                   )  
-"
+N_CHANNELS = N_CHANNELS    ( integer                   )  "
 )
 header ""
 )
@@ -1143,8 +1130,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,27000,47500,27800"
-st "SIGNAL i2c_wdata : std_logic_vector(7 DOWNTO 0)
-"
+st "SIGNAL i2c_wdata : std_logic_vector(7 DOWNTO 0)"
 )
 )
 *31 (Net
@@ -1161,8 +1147,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,19800,37500,20600"
-st "SIGNAL Wr        : std_logic
-"
+st "SIGNAL Wr        : std_logic"
 )
 )
 *32 (Net
@@ -1179,8 +1164,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,15000,37500,15800"
-st "SIGNAL Rd        : std_logic
-"
+st "SIGNAL Rd        : std_logic"
 )
 )
 *33 (Net
@@ -1198,8 +1182,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,26200,47500,27000"
-st "SIGNAL i2c_rdata : std_logic_vector(7 DOWNTO 0)
-"
+st "SIGNAL i2c_rdata : std_logic_vector(7 DOWNTO 0)"
 )
 )
 *34 (Net
@@ -1216,8 +1199,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,19000,37500,19800"
-st "SIGNAL Stop      : std_logic
-"
+st "SIGNAL Stop      : std_logic"
 )
 )
 *35 (Net
@@ -1234,8 +1216,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,13400,37500,14200"
-st "SIGNAL Done      : std_logic
-"
+st "SIGNAL Done      : std_logic"
 )
 )
 *36 (Net
@@ -1252,8 +1233,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,14200,37500,15000"
-st "SIGNAL Err       : std_logic
-"
+st "SIGNAL Err       : std_logic"
 )
 )
 *37 (Net
@@ -1270,8 +1250,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,18200,37500,19000"
-st "SIGNAL Start     : std_logic
-"
+st "SIGNAL Start     : std_logic"
 )
 )
 *38 (SaComponent
@@ -2500,7 +2479,8 @@ isHidden 1
 font "Courier New,8,0"
 )
 xt "57000,56200,92000,57000"
-st "I2C_CLK_PRESCALE = X\"000E\"    ( std_logic_vector (15 DOWNTO 0) )  "
+st "I2C_CLK_PRESCALE = X\"00BC\"    ( std_logic_vector (15 DOWNTO 0) )  
+"
 )
 header ""
 )
@@ -2508,7 +2488,7 @@ elements [
 (GiElement
 name "I2C_CLK_PRESCALE"
 type "std_logic_vector (15 DOWNTO 0)"
-value "X\"000E\""
+value "X\"00BC\""
 )
 ]
 )
@@ -2545,8 +2525,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,23000,37500,23800"
-st "SIGNAL WrEn1     : std_logic
-"
+st "SIGNAL WrEn1     : std_logic"
 )
 )
 *77 (Net
@@ -2565,8 +2544,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,27800,48000,28600"
-st "SIGNAL wData1    : std_logic_vector(15 DOWNTO 0)
-"
+st "SIGNAL wData1    : std_logic_vector(15 DOWNTO 0)"
 )
 )
 *78 (Net
@@ -2585,8 +2563,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,21400,53000,22200"
-st "SIGNAL WrAddr1   : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)
-"
+st "SIGNAL WrAddr1   : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)"
 )
 )
 *79 (SaComponent
@@ -2974,8 +2951,7 @@ font "Courier New,8,0"
 xt "43000,53400,76000,55800"
 st "ADDR_WIDTH = ADDR_WIDTH        ( integer range 16 downto 8 )  
 MEM_SIZE   = 4*N_CHANNELS+4    ( integer                   )  
-WORD_SIZE  = 16                ( integer                   )  
-"
+WORD_SIZE  = 16                ( integer                   )  "
 )
 header ""
 )
@@ -3447,8 +3423,7 @@ xt "26000,53400,59000,56600"
 st "BASE_ADDR  = BASE_ADDR     ( std_logic_vector(15 DOWNTO 0) )  
 ADDR_WIDTH = ADDR_WIDTH    ( integer range 16 downto 8     )  
 N_CHANNELS = N_CHANNELS    ( integer                       )  
-WORD_SIZE  = 16            ( integer                       )  
-"
+WORD_SIZE  = 16            ( integer                       )  "
 )
 header ""
 )
@@ -3521,8 +3496,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,11000,38000,11800"
-st "SIGNAL BdEn      : std_ulogic
-"
+st "SIGNAL BdEn      : std_ulogic"
 )
 )
 *109 (PortIoIn
@@ -3585,8 +3559,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,2000,49500,2800"
-st "ExpAddr   : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)
-"
+st "ExpAddr   : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)"
 )
 )
 *111 (Net
@@ -3605,8 +3578,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,7600,44500,8400"
-st "rData     : std_logic_vector(15 DOWNTO 0)
-"
+st "rData     : std_logic_vector(15 DOWNTO 0)"
 )
 )
 *112 (PortIoOut
@@ -3670,8 +3642,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,15800,53000,16600"
-st "SIGNAL RdAddr    : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)
-"
+st "SIGNAL RdAddr    : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)"
 )
 )
 *114 (Net
@@ -3688,8 +3659,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,25400,37500,26200"
-st "SIGNAL dpRdEn    : std_logic
-"
+st "SIGNAL dpRdEn    : std_logic"
 )
 )
 *115 (Net
@@ -3706,8 +3676,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,16600,38000,17400"
-st "SIGNAL RdEn      : std_ulogic
-"
+st "SIGNAL RdEn      : std_ulogic"
 )
 )
 *116 (PortIoIn
@@ -3769,8 +3738,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,2800,34500,3600"
-st "ExpRd     : std_ulogic
-"
+st "ExpRd     : std_ulogic"
 )
 )
 *118 (PortIoIn
@@ -3832,8 +3800,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,3600,34500,4400"
-st "ExpWr     : std_ulogic
-"
+st "ExpWr     : std_ulogic"
 )
 )
 *120 (PortIoIn
@@ -3895,8 +3862,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,6800,34500,7600"
-st "ExpAck    : std_ulogic
-"
+st "ExpAck    : std_ulogic"
 )
 )
 *122 (PortIoOut
@@ -3959,8 +3925,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,24600,37500,25400"
-st "SIGNAL WrRdy1    : std_logic
-"
+st "SIGNAL WrRdy1    : std_logic"
 )
 )
 *124 (Net
@@ -3977,8 +3942,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,22200,38000,23000"
-st "SIGNAL WrEn      : std_ulogic
-"
+st "SIGNAL WrEn      : std_ulogic"
 )
 )
 *125 (Net
@@ -3995,8 +3959,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,23800,37500,24600"
-st "SIGNAL WrEn2     : std_logic
-"
+st "SIGNAL WrEn2     : std_logic"
 )
 )
 *126 (Net
@@ -4013,8 +3976,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,20600,37500,21400"
-st "SIGNAL WrAck2    : std_logic
-"
+st "SIGNAL WrAck2    : std_logic"
 )
 )
 *127 (Net
@@ -4032,8 +3994,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,28600,48000,29400"
-st "SIGNAL wData2    : std_logic_vector(15 DOWNTO 0)
-"
+st "SIGNAL wData2    : std_logic_vector(15 DOWNTO 0)"
 )
 )
 *128 (Net
@@ -4051,8 +4012,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,12600,47500,13400"
-st "SIGNAL ChanAddr2 : std_logic_vector(3 DOWNTO 0)
-"
+st "SIGNAL ChanAddr2 : std_logic_vector(3 DOWNTO 0)"
 )
 )
 *129 (PortIoIn
@@ -4115,8 +4075,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,6000,44500,6800"
-st "wData     : std_logic_vector(15 DOWNTO 0)
-"
+st "wData     : std_logic_vector(15 DOWNTO 0)"
 )
 )
 *131 (Net
@@ -4133,8 +4092,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,11800,38000,12600"
-st "SIGNAL BdWrEn    : std_ulogic
-"
+st "SIGNAL BdWrEn    : std_ulogic"
 )
 )
 *132 (Net
@@ -4151,8 +4109,7 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "22000,17400,37500,18200"
-st "SIGNAL RdStat    : std_logic
-"
+st "SIGNAL RdStat    : std_logic"
 )
 )
 *133 (PortIoIn
@@ -6173,8 +6130,8 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "-8,-8,1288,1002"
-viewArea "-1579,-1579,107111,85637"
+windowSize "0,0,1281,1010"
+viewArea "-1600,-1600,106957,83864"
 cachedDiagramExtent "0,0,105000,79000"
 pageSetupInfo (PageSetupInfo
 ptrCmd ""
@@ -6198,7 +6155,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 3465,0
+lastUid 3574,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

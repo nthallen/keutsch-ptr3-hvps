@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>style/HVPS.qss</file>
+    </qresource>
+</RCC>

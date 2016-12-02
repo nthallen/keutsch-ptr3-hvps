@@ -66,7 +66,7 @@ lang 11
 decl (Decl
 n "clk"
 t "std_ulogic"
-o 1
+o 5
 suid 1,0
 )
 )
@@ -79,7 +79,7 @@ m 1
 decl (Decl
 n "Done"
 t "std_logic"
-o 18
+o 11
 suid 2,0
 )
 )
@@ -92,7 +92,7 @@ m 1
 decl (Decl
 n "Err"
 t "std_logic"
-o 19
+o 12
 suid 3,0
 )
 )
@@ -106,7 +106,7 @@ decl (Decl
 n "i2c_rdata"
 t "std_logic_vector"
 b "(7 DOWNTO 0)"
-o 16
+o 13
 suid 4,0
 )
 )
@@ -119,7 +119,7 @@ decl (Decl
 n "i2c_wdata"
 t "std_logic_vector"
 b "(7 DOWNTO 0)"
-o 13
+o 6
 suid 5,0
 )
 )
@@ -131,7 +131,7 @@ lang 11
 decl (Decl
 n "Rd"
 t "std_logic"
-o 15
+o 1
 suid 6,0
 )
 )
@@ -143,7 +143,7 @@ lang 11
 decl (Decl
 n "rst"
 t "std_ulogic"
-o 2
+o 7
 suid 7,0
 )
 )
@@ -155,7 +155,7 @@ lang 11
 decl (Decl
 n "Start"
 t "std_logic"
-o 20
+o 2
 suid 8,0
 )
 )
@@ -167,7 +167,7 @@ lang 11
 decl (Decl
 n "Stop"
 t "std_logic"
-o 17
+o 3
 suid 9,0
 )
 )
@@ -179,7 +179,7 @@ lang 11
 decl (Decl
 n "wb_ack_o"
 t "std_logic"
-o 5
+o 8
 suid 10,0
 )
 )
@@ -193,7 +193,7 @@ decl (Decl
 n "wb_adr_i"
 t "std_logic_vector"
 b "(2 DOWNTO 0)"
-o 6
+o 14
 suid 11,0
 )
 )
@@ -206,7 +206,7 @@ m 1
 decl (Decl
 n "wb_cyc_i"
 t "std_logic"
-o 7
+o 15
 suid 12,0
 )
 )
@@ -220,7 +220,7 @@ decl (Decl
 n "wb_dat_i"
 t "std_logic_vector"
 b "(7 DOWNTO 0)"
-o 8
+o 16
 suid 13,0
 )
 )
@@ -258,7 +258,7 @@ m 1
 decl (Decl
 n "wb_stb_i"
 t "std_logic"
-o 11
+o 17
 suid 16,0
 )
 )
@@ -271,7 +271,7 @@ m 1
 decl (Decl
 n "wb_we_i"
 t "std_logic"
-o 12
+o 18
 suid 17,0
 )
 )
@@ -283,7 +283,7 @@ lang 11
 decl (Decl
 n "Wr"
 t "std_logic"
-o 14
+o 4
 suid 18,0
 )
 )
@@ -561,7 +561,7 @@ name "I2C_CLK_PRESCALE"
 type "std_logic_vector (15 DOWNTO 0)"
 value "X\"000E\""
 )
-uid 177,0
+uid 285,0
 )
 ]
 )
@@ -617,7 +617,7 @@ uid 227,0
 litem &75
 pos 0
 dimension 20
-uid 178,0
+uid 286,0
 )
 ]
 )
@@ -730,7 +730,7 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\PTR3S\\PTR3_HVPS\\HDS\\PTR3_HVPS\\PT
 )
 (vvPair
 variable "date"
-value "11/ 9/2016"
+value "11/30/2016"
 )
 (vvPair
 variable "day"
@@ -742,7 +742,7 @@ value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "09"
+value "30"
 )
 (vvPair
 variable "entity_name"
@@ -770,7 +770,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/09/16"
+value "11/30/16"
 )
 (vvPair
 variable "graphical_source_group"
@@ -778,7 +778,7 @@ value "Domain Users"
 )
 (vvPair
 variable "graphical_source_time"
-value "13:35:48"
+value "15:19:50"
 )
 (vvPair
 variable "group"
@@ -799,6 +799,10 @@ value "PTR3_HVPS_lib"
 (vvPair
 variable "library_downstream_HdsLintPlugin"
 value "$HDS_PROJECT_DIR/PTR3_HVPS_lib/designcheck"
+)
+(vvPair
+variable "library_downstream_ModelSimCompiler"
+value "$HDS_PROJECT_DIR/PTR3_HVPS_lib/work"
 )
 (vvPair
 variable "mm"
@@ -878,7 +882,7 @@ value "symbol"
 )
 (vvPair
 variable "time"
-value "13:35:48"
+value "15:19:50"
 )
 (vvPair
 variable "unit"
@@ -944,14 +948,15 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,5200,61500,6000"
-st "clk       : IN     std_ulogic  ;"
+st "clk       : IN     std_ulogic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "clk"
 t "std_ulogic"
-o 1
+o 5
 suid 1,0
 )
 )
@@ -988,7 +993,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,10000,61000,10800"
-st "Done      : OUT    std_logic  ;"
+st "Done      : OUT    std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -996,7 +1002,7 @@ m 1
 decl (Decl
 n "Done"
 t "std_logic"
-o 18
+o 11
 suid 2,0
 )
 )
@@ -1033,7 +1039,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,10800,61000,11600"
-st "Err       : OUT    std_logic  ;"
+st "Err       : OUT    std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1041,7 +1048,7 @@ m 1
 decl (Decl
 n "Err"
 t "std_logic"
-o 19
+o 12
 suid 3,0
 )
 )
@@ -1078,7 +1085,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,11600,71000,12400"
-st "i2c_rdata : OUT    std_logic_vector (7 DOWNTO 0) ;"
+st "i2c_rdata : OUT    std_logic_vector (7 DOWNTO 0) ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1087,7 +1095,7 @@ decl (Decl
 n "i2c_rdata"
 t "std_logic_vector"
 b "(7 DOWNTO 0)"
-o 16
+o 13
 suid 4,0
 )
 )
@@ -1124,7 +1132,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,6000,71000,6800"
-st "i2c_wdata : IN     std_logic_vector (7 DOWNTO 0) ;"
+st "i2c_wdata : IN     std_logic_vector (7 DOWNTO 0) ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1132,7 +1141,7 @@ decl (Decl
 n "i2c_wdata"
 t "std_logic_vector"
 b "(7 DOWNTO 0)"
-o 13
+o 6
 suid 5,0
 )
 )
@@ -1169,14 +1178,15 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,2000,61000,2800"
-st "Rd        : IN     std_logic  ;"
+st "Rd        : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "Rd"
 t "std_logic"
-o 15
+o 1
 suid 6,0
 )
 )
@@ -1213,14 +1223,15 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,6800,61500,7600"
-st "rst       : IN     std_ulogic  ;"
+st "rst       : IN     std_ulogic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "rst"
 t "std_ulogic"
-o 2
+o 7
 suid 7,0
 )
 )
@@ -1257,14 +1268,15 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,2800,61000,3600"
-st "Start     : IN     std_logic  ;"
+st "Start     : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "Start"
 t "std_logic"
-o 20
+o 2
 suid 8,0
 )
 )
@@ -1301,14 +1313,15 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,3600,61000,4400"
-st "Stop      : IN     std_logic  ;"
+st "Stop      : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "Stop"
 t "std_logic"
-o 17
+o 3
 suid 9,0
 )
 )
@@ -1346,14 +1359,15 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,7600,61000,8400"
-st "wb_ack_o  : IN     std_logic  ;"
+st "wb_ack_o  : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "wb_ack_o"
 t "std_logic"
-o 5
+o 8
 suid 10,0
 )
 )
@@ -1391,7 +1405,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,12400,71000,13200"
-st "wb_adr_i  : OUT    std_logic_vector (2 DOWNTO 0) ;"
+st "wb_adr_i  : OUT    std_logic_vector (2 DOWNTO 0) ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1400,7 +1415,7 @@ decl (Decl
 n "wb_adr_i"
 t "std_logic_vector"
 b "(2 DOWNTO 0)"
-o 6
+o 14
 suid 11,0
 )
 )
@@ -1438,7 +1453,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,13200,61000,14000"
-st "wb_cyc_i  : OUT    std_logic  ;"
+st "wb_cyc_i  : OUT    std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1446,7 +1462,7 @@ m 1
 decl (Decl
 n "wb_cyc_i"
 t "std_logic"
-o 7
+o 15
 suid 12,0
 )
 )
@@ -1484,7 +1500,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,14000,71000,14800"
-st "wb_dat_i  : OUT    std_logic_vector (7 DOWNTO 0) ;"
+st "wb_dat_i  : OUT    std_logic_vector (7 DOWNTO 0) ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1493,7 +1510,7 @@ decl (Decl
 n "wb_dat_i"
 t "std_logic_vector"
 b "(7 DOWNTO 0)"
-o 8
+o 16
 suid 13,0
 )
 )
@@ -1531,7 +1548,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,8400,71000,9200"
-st "wb_dat_o  : IN     std_logic_vector (7 DOWNTO 0) ;"
+st "wb_dat_o  : IN     std_logic_vector (7 DOWNTO 0) ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1577,7 +1595,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,9200,61000,10000"
-st "wb_inta_o : IN     std_logic  ;"
+st "wb_inta_o : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1622,7 +1641,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,14800,61000,15600"
-st "wb_stb_i  : OUT    std_logic  ;"
+st "wb_stb_i  : OUT    std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1630,7 +1650,7 @@ m 1
 decl (Decl
 n "wb_stb_i"
 t "std_logic"
-o 11
+o 17
 suid 16,0
 )
 )
@@ -1668,7 +1688,8 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,15600,60000,16400"
-st "wb_we_i   : OUT    std_logic "
+st "wb_we_i   : OUT    std_logic 
+"
 )
 thePort (LogicalPort
 lang 11
@@ -1676,7 +1697,7 @@ m 1
 decl (Decl
 n "wb_we_i"
 t "std_logic"
-o 12
+o 18
 suid 17,0
 )
 )
@@ -1713,20 +1734,22 @@ va (VaSet
 font "Courier New,8,0"
 )
 xt "44000,4400,61000,5200"
-st "Wr        : IN     std_logic  ;"
+st "Wr        : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "Wr"
 t "std_logic"
-o 14
+o 4
 suid 18,0
 )
 )
 )
 ]
 shape (Rectangle
+uid 259,0
 va (VaSet
 vasetType 1
 fg "0,65535,0"
@@ -1772,7 +1795,8 @@ font "Courier New,8,0"
 xt "-14000,1000,16500,3400"
 st "Generic Declarations
 
-I2C_CLK_PRESCALE std_logic_vector (15 DOWNTO 0) X\"000E\"  "
+I2C_CLK_PRESCALE std_logic_vector (15 DOWNTO 0) X\"000E\"  
+"
 )
 header "Generic Declarations"
 showHdrWhenContentsEmpty 1
@@ -2428,6 +2452,6 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 235,0
+lastUid 286,0
 activeModelName "Symbol:CDM"
 )
