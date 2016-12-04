@@ -20,16 +20,29 @@ public:
   void ready();
   uint16_t rawValue();
   double convertedValue();
-  QString convertedText();
+  virtual QString convertedText();
 
 signals:
   void valueUpdated(bool);
 
+protected:
+  uint16_t value;
 private:
   uint16_t address;
-  uint16_t value;
   bool fresh;
   bool read_pending;
+};
+
+class adc_tmsbvar : public tmsbvar {
+public:
+  adc_tmsbvar(uint16_t addr, bool bipolar, double gain, char fmt, int prec);
+  ~adc_tmsbvar();
+  QString convertedText();
+private:
+  bool is_bipolar;
+  double gain;
+  char format;
+  int precision;
 };
 
 #endif // TMSBVAR_H

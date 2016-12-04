@@ -14,9 +14,9 @@ hvpsWindow::hvpsWindow() {
     chans[i] = 0;
   }
   chans[0] = new hvps_channel(1, "Uql", layout, ++row, true);
-  chans[1] = new hvps_channel(2, "Udrift", layout, ++row, false);
-  chans[2] = new hvps_channel(3, "UTEx", layout, ++row, false);
-  chans[3] = new hvps_channel(4, "USref", layout, ++row, false);
+  chans[1] = new hvps_channel(2, "Udrift", layout, ++row, true);
+  chans[2] = new hvps_channel(3, "UTEx", layout, ++row, true);
+  chans[3] = new hvps_channel(4, "USref", layout, ++row, true);
 
   layout->addWidget(status,++row,0,3,7);
   connect(&Subbus_client::SB, &Subbus::statusChanged,

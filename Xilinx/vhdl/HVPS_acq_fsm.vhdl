@@ -68,8 +68,8 @@ ARCHITECTURE fsm OF HVPS_acq IS
     S1_DAC_ERR, S1_DAC_ERR_1,
     S1_INIT, S1_INIT_1, S1_INIT_2, S1_INIT_3, S1_INIT_4,
     S1_LOOP, S1_LOOP_1, S1_LOOP_2,
-    S1_LOOP_INIT, S1_LOOP_INIT_1, S1_LOOP_INIT_2, S1_LOOP_INIT_3,
-    S1_LOOP_INIT_4,
+    S1_LOOP_INIT, S1_LOOP_INIT_1, S1_LOOP_INIT_2, S1_LOOP_INIT_2A,
+    S1_LOOP_INIT_3, S1_LOOP_INIT_4,
     S1_LOOP_ADCIRD, S1_LOOP_ADCIWR, S1_LOOP_ADCVCFG,
     S1_LOOP_DAC, S1_LOOP_DAC_1, S1_LOOP_DAC_2,
     S1_LOOP1_ITER,
@@ -97,6 +97,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
   SIGNAL RData : std_logic_vector(15 DOWNTO 0);
   SIGNAL adc_wr_ptr : std_logic_vector(7 DOWNTO 0);
   SIGNAL adc_wr_data : std_logic_vector(15 DOWNTO 0);
+  SIGNAL dac_reg_data : std_logic_vector(7 DOWNTO 0);
   SIGNAL dac_wr_data : std_logic_vector(15 DOWNTO 0);
   SIGNAL mux_cfg : std_logic_vector(7 DOWNTO 0);
   TYPE Cfg_t is array (0 TO N_CHANNELS-1) of std_logic_vector(5 DOWNTO 0);
@@ -117,6 +118,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
   constant ADC_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10010000";
   constant DAC_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10011000";
   constant DAC_WR_IO : std_logic_vector(7 DOWNTO 0) := "00110000";
+  constant DAC_WR_CTRL : std_logic_vector(7 DOWNTO 0) := "01000000";
   constant LO_THRESH_PTR : std_logic_vector(7 DOWNTO 0) := "00000010";
   constant LO_THRESH : std_logic_vector(15 DOWNTO 0) := X"0010";
   constant HI_THRESH_PTR : std_logic_vector(7 DOWNTO 0) := "00000011";
@@ -239,9 +241,11 @@ BEGIN
     END PROCEDURE start_adc_wr;
     
     PROCEDURE start_dac_wr(
+      reg : IN std_logic_vector(7 DOWNTO 0);
       data : IN std_logic_vector(15 DOWNTO 0);
       nxt : IN State1_t ) IS
     BEGIN
+      dac_reg_data <= reg;
       dac_wr_data <= data;
       dac_nxt <= nxt;
       crnt_state1 <= S1_DAC_WR;
@@ -402,7 +406,7 @@ BEGIN
           WHEN S1_DAC_WR =>
             start_txn('1','0','1','0',DAC_I2C_ADDR,S1_DAC_WR,S1_DAC_WR_1,S1_DAC_ERR);
           WHEN S1_DAC_WR_1 =>
-            start_txn('1','0','0','0',DAC_WR_IO,S1_DAC_WR_1,S1_DAC_WR_2,S1_DAC_ERR);
+            start_txn('1','0','0','0',dac_reg_data,S1_DAC_WR_1,S1_DAC_WR_2,S1_DAC_ERR);
           WHEN S1_DAC_WR_2 =>
             start_txn('1','0','0','0',dac_wr_data(15 DOWNTO 8),
               S1_DAC_WR_2,S1_DAC_WR_3,S1_DAC_ERR);
@@ -514,7 +518,9 @@ BEGIN
           -- Write 0 to DAC
           WHEN S1_LOOP_INIT_2 =>
             err_recovery_nxt <= S1_LOOP_ADCVCFG; -- skip ahead
-            start_dac_wr(X"0000", S1_LOOP_INIT_3);
+            start_dac_wr(DAC_WR_CTRL, X"0800", S1_LOOP_INIT_2A);
+          WHEN S1_LOOP_INIT_2A =>
+            start_dac_wr(DAC_WR_IO, X"0000", S1_LOOP_INIT_3);
           WHEN S1_LOOP_INIT_3 =>
             Stat0_init(conv_integer(Chan)) <= '1';
             start_ram(conv_integer(Chan)*4+DAC_SETPOINT_OFFSET,X"0000",S1_LOOP_INIT_4);
@@ -534,7 +540,7 @@ BEGIN
             err_recovery_nxt <= S1_LOOP1_ITER;
             IF WrEn2 = '1' AND ChanAddr2 = Chan THEN
               WrAck2 <= '1';
-              start_dac_wr(WData2, S1_LOOP_DAC_1);
+              start_dac_wr(DAC_WR_IO, WData2, S1_LOOP_DAC_1);
             ELSE
               start_dac_rd(S1_LOOP_DAC_2);
             END IF;

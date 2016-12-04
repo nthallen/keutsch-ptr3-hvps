@@ -28,8 +28,7 @@ void tmsbvar::ready() {
     case SBC_READACK:
       switch (cmd_status) {
         case SBS_ACK:
-          value = ((reply_data.read_data)>>4)*10 +
-                (reply_data.read_data & 0xF);
+          value = reply_data.read_data;
           read_pending = false;
           fresh = true;
           emit valueUpdated(true);
@@ -77,4 +76,25 @@ void tmsbvar::ready() {
 //  double convertedValue();
 QString tmsbvar::convertedText() {
   return QString::number(value);
+}
+
+adc_tmsbvar::adc_tmsbvar(uint16_t addr, bool bipolar, double gain_in, char fmt, int prec) :
+  tmsbvar(addr) {
+  is_bipolar = bipolar;
+  gain = gain_in;
+  format = fmt;
+  precision = prec;
+}
+
+adc_tmsbvar::~adc_tmsbvar() {}
+
+QString adc_tmsbvar::convertedText() {
+  double dval;
+  if (is_bipolar) {
+    int16_t svalue = (int16_t)value;
+    dval = svalue * gain;
+  } else {
+    dval = value * gain;
+  }
+  return QString::number(dval, format, precision);
 }
