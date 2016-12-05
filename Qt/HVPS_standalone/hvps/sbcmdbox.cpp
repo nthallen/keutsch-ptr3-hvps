@@ -1,17 +1,17 @@
+#include <math.h>
 #include "sbcmdbox.h"
 
-sbcmdbox::sbcmdbox(uint16_t addr) {
+sbcmdbox::sbcmdbox(uint16_t addr, int range_in, int prec) {
   address = addr;
   dvalue = 0;
   value = 0;
+  range = range_in;
   write_pending = false;
   write_queued = false;
   widget = new QDoubleSpinBox();
   widget->setAlignment(Qt::AlignRight);
-  widget->setRange(0,5);
-  // widget->setMinimum(0);
-  // widget->setMaximum(65535);
-  widget->setSingleStep(.1);
+  widget->setRange(0,range);
+  widget->setSingleStep(pow(10.,-prec));
   widget->setValue(value);
   connect(widget, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
           this, &sbcmdbox::valueChanged);
@@ -35,7 +35,7 @@ void sbcmdbox::ready() {
 
 void sbcmdbox::valueChanged(double newval) {
   dvalue = newval;
-  int ivalue = 65536*dvalue/5.0;
+  int ivalue = 65536*dvalue/range;
   if (ivalue >= 65536) {
     ivalue = 65535;
   } else if (ivalue < 0) {
