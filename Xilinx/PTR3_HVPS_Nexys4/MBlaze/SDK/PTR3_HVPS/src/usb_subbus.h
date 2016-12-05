@@ -17,7 +17,7 @@
 /* BOARD_REV includes the SUBBUS_SUBFUNCTION code (5 for DACS) and the
  * SUBBUS_FEATURES bitmap (in hex). Values are defined in subbus.h
  */
-#define BOARD_REV                   "V7:178:Tripole Rev A V1.0"
+#define BOARD_REV                   "V7:178:Harvard PTR3 HVPS Rev A V1.0"
 #define CPU_FREQ                    XPAR_CPU_CORE_CLOCK_FREQ_HZ
 #define SUBBUS_CTRL_DEVICE_ID       XPAR_AXI_GPIO_SB_CTRL_DEVICE_ID
 #define SUBBUS_STATUS_DEVICE_ID     XPAR_AXI_GPIO_SB_STATUS_DEVICE_ID

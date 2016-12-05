@@ -28,3 +28,21 @@ INCLUDEPATH = nortlib subbus hvps
 
 RESOURCES += \
     hvps_standalone.qrc
+#==========Deploy
+win32: {
+    TARGET_CUSTOM_EXT = .exe
+
+    CONFIG( debug, debug|release ) {
+        # debug
+        DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/debug/$${TARGET}$${TARGET_CUSTOM_EXT}))
+        DLLDESTDIR  = $$shell_quote($$shell_path($${OUT_PWD}/out/debug/))
+    } else {
+        # release
+        DEPLOY_TARGET = $$shell_quote($$shell_path($${OUT_PWD}/release/$${TARGET}$${TARGET_CUSTOM_EXT}))
+        DLLDESTDIR  = $$shell_quote($$shell_path($${OUT_PWD}/out/release/))
+    }
+
+    DEPLOY_COMMAND = windeployqt
+    QMAKE_POST_LINK = $${DEPLOY_COMMAND} --dir $${DLLDESTDIR} --no-translations $${DEPLOY_TARGET}
+}
+#==========================================

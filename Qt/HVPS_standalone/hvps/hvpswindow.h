@@ -12,6 +12,14 @@ class hvpsWindow : public QObject {
 public:
   hvpsWindow();
   ~hvpsWindow();
+  static const int label_col = 0;
+  static const int cmd_col = 1;
+  static const int set_col = 2;
+  static const int read1_col = 3;
+  static const int read1_units_col = 4;
+  static const int read2_col = 5;
+  static const int read2_units_col = 6;
+  static const int n_cols = 7;
 public slots:
   void acquire();
 private:
