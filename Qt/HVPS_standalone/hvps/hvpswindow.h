@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QGridLayout>
 #include "hvps_channel.h"
+#include "hvps_status.h"
 
 class hvpsWindow : public QObject {
   Q_OBJECT
@@ -17,6 +18,7 @@ private:
   QWidget *window;
   QGridLayout *layout;
   hvps_channel *chans[14];
+  hvps_status *tmstat;
   QTimer poll;
   QLabel *status;
 };

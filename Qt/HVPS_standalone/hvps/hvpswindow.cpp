@@ -18,6 +18,7 @@ hvpsWindow::hvpsWindow() {
   chans[2] = new hvps_channel(3, "UTEx", layout, ++row, true);
   chans[3] = new hvps_channel(4, "USref", layout, ++row, true);
 
+  tmstat = new hvps_status(layout, ++row);
   layout->addWidget(status,++row,0,3,7);
   connect(&Subbus_client::SB, &Subbus::statusChanged,
           status, &QLabel::setText);
@@ -47,4 +48,5 @@ void hvpsWindow::acquire() {
       chans[i]->acquire();
     }
   }
+  tmstat->acquire();
 }

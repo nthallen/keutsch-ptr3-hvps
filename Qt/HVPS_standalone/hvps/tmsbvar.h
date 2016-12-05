@@ -45,4 +45,11 @@ private:
   int precision;
 };
 
+class dstat_tmsbvar : public tmsbvar {
+public:
+  dstat_tmsbvar(uint16_t addr);
+  ~dstat_tmsbvar();
+  QString convertedText();
+};
+
 #endif // TMSBVAR_H

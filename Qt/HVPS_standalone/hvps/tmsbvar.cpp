@@ -98,3 +98,12 @@ QString adc_tmsbvar::convertedText() {
   }
   return QString::number(dval, format, precision);
 }
+
+dstat_tmsbvar::dstat_tmsbvar(uint16_t addr) :
+  tmsbvar(addr) {}
+
+dstat_tmsbvar::~dstat_tmsbvar() {}
+
+QString dstat_tmsbvar::convertedText() {
+  return QString("%1").arg((uint)value,4,16,QChar('0')).toUpper();
+}

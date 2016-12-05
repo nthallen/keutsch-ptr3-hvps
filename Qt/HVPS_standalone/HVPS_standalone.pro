@@ -9,7 +9,8 @@ HEADERS += \
     hvps/sbcmdbox.h \
     hvps/hvps_channel.h \
     subbus/subbus.h \
-    hvps/hvpswindow.h
+    hvps/hvpswindow.h \
+    hvps/hvps_status.h
 SOURCES += \
     main.cpp \
     nortlib/nl_error.cpp nortlib/nl_verr.cpp \
@@ -21,7 +22,8 @@ SOURCES += \
     hvps/hvps_channel.cpp \
     subbus/subbus.cpp \
     nortlib/ascii_esc.cpp \
-    hvps/hvpswindow.cpp
+    hvps/hvpswindow.cpp \
+    hvps/hvps_status.cpp
 INCLUDEPATH = nortlib subbus hvps
 
 RESOURCES += \

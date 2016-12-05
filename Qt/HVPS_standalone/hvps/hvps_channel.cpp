@@ -18,7 +18,7 @@ hvps_channel::hvps_channel(int chan, QString name,
   cmd = new sbcmdbox(base_addr+setpoint_offset);
   grid->addWidget(cmd->widget, row, 1);
 
-  setpoint_var = new adc_tmsbvar(base_addr+dac_offset, false, 2.5/65536, 'f', 5);
+  setpoint_var = new adc_tmsbvar(base_addr+dac_offset, false, 5.0/65536, 'f', 5);
   // setpoint_var = new tmsbvar(base_addr+dac_offset);
   setpoint = new tmdispvar(setpoint_var);
   grid->addWidget(setpoint->widget, row, 2);

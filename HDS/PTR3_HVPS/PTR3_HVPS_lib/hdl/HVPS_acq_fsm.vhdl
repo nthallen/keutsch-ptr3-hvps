@@ -58,12 +58,13 @@ ARCHITECTURE fsm OF HVPS_acq IS
     S1_MUX_WR, S1_MUX_WR_1, S1_MUX_WR_2, S1_MUX_WR_3,
     S1_ADC_RD, S1_ADC_RD_0, S1_ADC_RD_1, S1_ADC_RD_2, S1_ADC_RD_3,
     S1_ADC_RD_4, S1_ADC_RD_5, S1_ADC_RD_6, S1_ADC_RD_7, S1_ADC_RD_8,
-    S1_ADC_RD_9, S1_ADC_RD_10,
+    S1_ADC_RD_9, S1_ADC_RD_10, S1_ADC_RD_11,
     S1_ADC_WR, S1_ADC_WR_1, S1_ADC_WR_2, S1_ADC_WR_3,
     S1_DAC_WR, S1_DAC_WR_1, S1_DAC_WR_2, S1_DAC_WR_3,
     S1_DAC_RD, S1_DAC_RD_1, S1_DAC_RD_2, S1_DAC_RD_3,
+    S1_DAC_RD_4,
     S1_LOOP_ITER, S1_LOOP_ITER_1,
-    S1_MUX_ERR, S1_MUX_ERR_1,
+    S1_MUX_ERR, S1_MUX_ERR_1, S1_MUX_ERR_2, S1_MUX_ERR_3,
     S1_ADC_ERR, S1_ADC_ERR_1,
     S1_DAC_ERR, S1_DAC_ERR_1,
     S1_INIT, S1_INIT_1, S1_INIT_2, S1_INIT_3, S1_INIT_4,
@@ -388,7 +389,14 @@ BEGIN
             start_txn('0','1','0','1',X"00",S1_ADC_RD_9,S1_ADC_RD_10,S1_ADC_ERR);
           WHEN S1_ADC_RD_10 =>
             RData(7 DOWNTO 0) <= i2c_rdata;
-            crnt_state1 <= adc_nxt;
+            IF (Stat2_adc(conv_integer(Chan)) = '1') THEN
+              Stat2_adc(conv_integer(Chan)) <= '0';
+              crnt_state1 <= S1_ADC_RD_11;
+            ELSE
+              crnt_state1 <= adc_nxt;
+            END IF;
+          WHEN S1_ADC_RD_11 =>
+            start_ram(2,Stat2_adc,adc_nxt);
 
           -- subroutine to write to ADC, started via start_adc_wr()
           WHEN S1_ADC_WR =>
@@ -424,7 +432,14 @@ BEGIN
             start_txn('0','1','0','1',X"00",S1_DAC_RD_2,S1_DAC_RD_3,S1_DAC_ERR);
           WHEN S1_DAC_RD_3 =>
             RData(7 DOWNTO 0) <= i2c_rdata;
-            crnt_state1 <= dac_nxt;
+            IF (Stat3_dac(conv_integer(Chan)) = '1') THEN
+              Stat3_dac(conv_integer(Chan)) <= '0';
+              crnt_state1 <= S1_DAC_RD_4;
+            ELSE
+              crnt_state1 <= dac_nxt;
+            END IF;
+          WHEN S1_DAC_RD_4 =>
+            start_ram(3,Stat3_dac,dac_nxt);
           
           -- chan_loop_iterate(): End of loop subroutine (since there are two loops)
           WHEN S1_LOOP_ITER =>
@@ -451,10 +466,19 @@ BEGIN
               Stat1_mux(conv_integer(Chan)) <= '1';
               crnt_state1 <= S1_MUX_ERR_1;
             ELSE
-              crnt_state1 <= err_recovery_nxt;
+              crnt_state1 <= S1_MUX_ERR_2;
             END IF;
           WHEN S1_MUX_ERR_1 =>
-            start_ram(1,Stat1_mux,err_recovery_nxt);
+            start_ram(1,Stat1_mux,S1_MUX_ERR_2);
+          WHEN S1_MUX_ERR_2 =>
+            IF Stat0_init(conv_integer(Chan)) = '1' THEN
+              Stat0_init(conv_integer(Chan)) <= '0';
+              crnt_state1 <= S1_MUX_ERR_3;
+            ELSE
+              crnt_state1 <= err_recovery_nxt;
+            END IF;
+          WHEN S1_MUX_ERR_3 =>
+            start_ram(0,Stat0_init,err_recovery_nxt);
           
           -- Handle errors from HVPS_txn
           -- Set bit in the Stat2_adc and write to RAM
