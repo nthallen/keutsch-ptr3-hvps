@@ -7,7 +7,7 @@ class sbcmdbox : public QObject, public Subbus_client {
   Q_OBJECT
 
 public:
-  sbcmdbox(uint16_t addr);
+  sbcmdbox(uint16_t addr, int range, int prec);
   ~sbcmdbox();
   QDoubleSpinBox *widget;
   void ready();
@@ -19,6 +19,7 @@ private:
   uint16_t address;
   uint16_t value;
   double dvalue;
+  double range;
   bool write_pending;
   bool write_queued;
 };

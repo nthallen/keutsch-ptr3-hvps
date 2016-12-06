@@ -9,7 +9,8 @@
 class hvps_channel {
 public:
   hvps_channel(int chan, QString name, QGridLayout *grid, int row,
-               QString units2);
+               int range1, int prec1, QString units,
+               int range2, int prec2, QString units2);
   ~hvps_channel();
   void acquire();
   static const uint16_t hvps_base_addr = 0x50;
