@@ -56,6 +56,7 @@ ARCHITECTURE rtl OF HVPS_tester IS
   SIGNAL m8_sda : std_logic_vector(4 DOWNTO 0);
   SIGNAL dummy : std_logic;
   SIGNAL ReadData : std_logic_vector(15 DOWNTO 0);
+  SIGNAL mux_en : std_logic_vector(8 DOWNTO 1);
   
   COMPONENT i2c_ext_switch
      GENERIC (
@@ -65,6 +66,7 @@ ARCHITECTURE rtl OF HVPS_tester IS
      PORT (
         clk   : IN     std_ulogic;
         m_scl : INOUT  std_logic_vector(N_SWBITS DOWNTO 0);
+        en    : IN     std_logic;
         m_sda : INOUT  std_logic_vector(N_SWBITS DOWNTO 0);
         rst   : IN     std_ulogic;
         scl   : INOUT  std_logic;
@@ -116,7 +118,8 @@ BEGIN
          m_sda => m1_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(1)
       );
   
   adc_1_1 : ads1115
@@ -194,7 +197,8 @@ BEGIN
          m_sda => m2_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(2)
       );
   
   adc_2_1 : ads1115
@@ -240,7 +244,8 @@ BEGIN
          m_sda => m3_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(3)
       );
   
   adc_3_1 : ads1115
@@ -270,7 +275,8 @@ BEGIN
          m_sda => m4_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(4)
       );
   
   adc_4_1 : ads1115
@@ -316,7 +322,8 @@ BEGIN
          m_sda => m5_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(5)
       );
   
   adc_5_1 : ads1115
@@ -346,7 +353,8 @@ BEGIN
          m_sda => m6_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(6)
       );
   
   adc_6_1 : ads1115
@@ -392,7 +400,8 @@ BEGIN
          m_sda => m7_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(7)
       );
   
   adc_7_1 : ads1115
@@ -422,7 +431,8 @@ BEGIN
          m_sda => m8_sda,
          rst   => rst,
          scl   => scl,
-         sda   => sda
+         sda   => sda,
+         en    => mux_en(8)
       );
   
   adc_8_1 : ads1115
@@ -531,6 +541,7 @@ BEGIN
     m7_sda <= (others => 'H');
     m8_scl <= (others => 'H');
     m8_sda <= (others => 'H');
+    mux_en <= (1 => '1', others => '0');
     rst <= '1';
     -- pragma synthesis_off
     wait until clk_100MHz'EVENT AND clk_100MHz = '1';
@@ -542,7 +553,19 @@ BEGIN
     wait for 100 ms;
     sbrd(X"0034");
     assert ReadData = X"1234" report "Readback failed" severity error;
+    mux_en(1) <= '0';
+    wait for 20 ms;
+    mux_en(1) <= '1';
+    wait for 20 ms;
+    sbrd(X"0034");
+    assert ReadData = X"0000" report "Setpoint readback should be zero after reinit"
+      severity error;
+    sbwr(X"0034",X"4321",'1');
+    wait for 45 ms;
+    sbrd(X"0034");
+    assert ReadData = X"4321" report "Readback after reinit failed" severity error;
     wait for 100 ms;
+    sbrd(X"0034");
 
     SimDone <= '1';
     wait;

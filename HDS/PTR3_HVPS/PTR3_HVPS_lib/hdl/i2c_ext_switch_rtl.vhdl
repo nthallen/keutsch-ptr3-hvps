@@ -23,7 +23,8 @@ ENTITY i2c_ext_switch IS
       m_sda : INOUT  std_logic_vector(N_SWBITS DOWNTO 0);
       rst   : IN     std_ulogic;
       scl   : INOUT  std_logic;
-      sda   : INOUT  std_logic
+      sda   : INOUT  std_logic;
+      en    : IN     std_logic
    );
 END i2c_ext_switch;
 
@@ -55,6 +56,7 @@ ARCHITECTURE rtl OF i2c_ext_switch IS
          clk   : IN     std_ulogic;
          rst   : IN     std_ulogic;
          scl   : IN     std_logic;
+         en    : IN     std_logic;
          sda   : INOUT  std_logic;
          wdata : OUT    std_ulogic_vector(7 DOWNTO 0);
          WE    : OUT    std_logic;
@@ -114,6 +116,7 @@ BEGIN
          clk   => clk,
          rst   => rst,
          scl   => m_scl(N_SWBITS),
+         en    => en,
          sda   => m_sda(N_SWBITS),
          wdata => wdata,
          WE    => WE,

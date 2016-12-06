@@ -54,6 +54,7 @@ ARCHITECTURE sim OF ads1115 IS
          rdata : IN     std_logic_vector(7 DOWNTO 0);
          rst   : IN     std_ulogic;
          scl   : IN     std_logic;
+         en    : IN     std_logic;
          WE    : OUT    std_logic;
          start : OUT    std_ulogic;
          stop  : OUT    std_ulogic;
@@ -74,6 +75,7 @@ BEGIN
       rdata => rdata,
       rst   => rst,
       scl   => scl,
+      en    => '1',
       WE    => WE,
       start => start,
       stop  => stop,

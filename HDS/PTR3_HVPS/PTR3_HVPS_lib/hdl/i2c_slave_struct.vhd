@@ -31,6 +31,7 @@ ENTITY i2c_slave IS
       rdata : IN     std_logic_vector (7 DOWNTO 0);
       rst   : IN     std_ulogic;
       scl   : IN     std_logic;
+      en    : IN     std_logic;
       WE    : OUT    std_logic;
       start : OUT    std_ulogic;
       stop  : OUT    std_ulogic;
@@ -77,28 +78,29 @@ ARCHITECTURE struct OF i2c_slave IS
       I2C_ADDR : std_logic_vector(6 downto 0) := "1000000"
    );
    PORT (
-      clk   : IN     std_ulogic ;
-      err   : IN     std_ulogic ;
+      clk   : IN     std_ulogic;
+      err   : IN     std_ulogic;
       rdata : IN     std_logic_vector (7 DOWNTO 0);
-      rst   : IN     std_ulogic ;
-      scl   : IN     std_logic ;
-      start : IN     std_ulogic ;
-      stop  : IN     std_ulogic ;
-      WE    : OUT    std_logic ;
+      rst   : IN     std_ulogic;
+      scl   : IN     std_logic;
+      start : IN     std_ulogic;
+      stop  : IN     std_ulogic;
+      en    : IN     std_logic;
+      WE    : OUT    std_logic;
       wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
-      RE    : INOUT  std_logic ;
+      RE    : INOUT  std_logic;
       sda   : INOUT  std_logic 
    );
    END COMPONENT;
    COMPONENT i2c_slave_sup
    PORT (
-      clk    : IN     std_ulogic ;
-      rst    : IN     std_ulogic ;
-      scl_in : IN     std_logic ;
-      sda_in : IN     std_logic ;
-      err    : OUT    std_ulogic ;
-      start  : OUT    std_ulogic ;
+      clk    : IN     std_ulogic;
+      rst    : IN     std_ulogic;
+      scl_in : IN     std_logic;
+      sda_in : IN     std_logic;
+      err    : OUT    std_ulogic;
+      start  : OUT    std_ulogic;
       stop   : OUT    std_ulogic 
    );
    END COMPONENT;
@@ -118,6 +120,7 @@ BEGIN
          rdata => rdata,
          rst   => rst,
          scl   => scl,
+         en    => en,
          start => start_internal,
          stop  => stop_internal,
          WE    => WE,

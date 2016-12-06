@@ -22,6 +22,7 @@ ENTITY i2c_slave_bits IS
       scl   : IN     std_logic;
       start : IN     std_ulogic;
       stop  : IN     std_ulogic;
+      en    : IN     std_logic;
       WE    : OUT    std_logic;
       wdata : OUT    std_ulogic_vector (7 DOWNTO 0);
       rdreq : OUT    std_logic;
@@ -403,24 +404,26 @@ BEGIN
       sdaq <= To_X01(sda);
 
       -- Combined Actions
-      CASE current_state IS
-         WHEN i2cs_addr2 => 
-            sda <= '0';
-         WHEN i2cs_addr3 => 
-            sda <= '0';
-         WHEN i2cs_w2 => 
-            sda <= '0';
-         WHEN i2cs_w3 => 
-            sda <= '0';
-         WHEN i2cs_r1 => 
-            sda <= sr(7);
-         WHEN i2cs_r2 => 
-            sda <= sr(7);
-         WHEN i2cs_w6 => 
-            sda <= '0';
-         WHEN OTHERS =>
-            NULL;
-      END CASE;
+      IF (en = '1') THEN
+        CASE current_state IS
+           WHEN i2cs_addr2 => 
+              sda <= '0';
+           WHEN i2cs_addr3 => 
+              sda <= '0';
+           WHEN i2cs_w2 => 
+              sda <= '0';
+           WHEN i2cs_w3 => 
+              sda <= '0';
+           WHEN i2cs_r1 => 
+              sda <= sr(7);
+           WHEN i2cs_r2 => 
+              sda <= sr(7);
+           WHEN i2cs_w6 => 
+              sda <= '0';
+           WHEN OTHERS =>
+              NULL;
+        END CASE;
+      END IF;
    END PROCESS output_proc;
  
    -- Concurrent Statements
