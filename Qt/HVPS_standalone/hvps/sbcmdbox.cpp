@@ -10,7 +10,12 @@ sbcmdbox::sbcmdbox(uint16_t addr, int range_in, int prec) {
   write_queued = false;
   widget = new QDoubleSpinBox();
   widget->setAlignment(Qt::AlignRight);
-  widget->setRange(0,range);
+  if (range > 0) {
+    widget->setRange(0,range);
+  } else {
+    widget->setRange(range,0);
+  }
+  widget->setDecimals(prec);
   widget->setSingleStep(pow(10.,-prec));
   widget->setValue(value);
   connect(widget, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
