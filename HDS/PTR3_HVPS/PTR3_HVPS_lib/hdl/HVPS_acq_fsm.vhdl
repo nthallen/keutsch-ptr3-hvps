@@ -23,6 +23,7 @@ ENTITY HVPS_acq IS
       ADDR_WIDTH : integer range 16 downto 8 := 16;
       WORD_SIZE  : integer                   := 16;
       N_CHANNELS : integer                   := 14
+      --CHANCFGBITS : integer                  := 9
    );
    PORT( 
       ChanAddr2 : IN     std_logic_vector (3 DOWNTO 0);
@@ -101,19 +102,26 @@ ARCHITECTURE fsm OF HVPS_acq IS
   SIGNAL dac_reg_data : std_logic_vector(7 DOWNTO 0);
   SIGNAL dac_wr_data : std_logic_vector(15 DOWNTO 0);
   SIGNAL mux_cfg : std_logic_vector(7 DOWNTO 0);
-  TYPE Cfg_t is array (0 TO N_CHANNELS-1) of std_logic_vector(5 DOWNTO 0);
-  -- Hi-order 3 bits are board address
-  -- Next 2 bits are channel address on the board
-  -- LSB indicates channel is the last one on the board
+  constant CHANCFGBITS : integer := 9;
+  TYPE Cfg_t is array (0 TO N_CHANNELS-1) of std_logic_vector(CHANCFGBITS-1 DOWNTO 0);
+  -- 8:6 => Voltage range
+  --   000 => 200
+  --   001 => 400
+  --   010 => -800
+  --   011 => 2000
+  --   100 => 3000
+  -- 5:3 => board address
+  -- 2:1 => Next 2 bits are channel address on the board
+  -- 0 => LSB indicates channel is the last one on the board
   constant ChanCfgs : Cfg_t :=
-    ( "000000", "000010", "000100", "000111",
-      "001000", "001011",
-      "010001",
-      "011000", "011011",
-      "100001",
-      "101000", "101011",
-      "110001",
-      "111001" );
+    ( "000000000", "000000010", "001000100", "010000111",
+      "011001000", "011001011",
+      "100010001",
+      "011011000", "011011011",
+      "100100001",
+      "011101000", "011101011",
+      "100110001",
+      "100111001" );
   constant MUX_I2C_PREFIX : std_logic_vector(3 DOWNTO 0) := "1110";
   constant MUX_DISABLE : std_logic_vector(7 DOWNTO 0) := X"00";
   constant ADC_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10010000";
@@ -121,9 +129,9 @@ ARCHITECTURE fsm OF HVPS_acq IS
   constant DAC_WR_IO : std_logic_vector(7 DOWNTO 0) := "00110000";
   constant DAC_WR_CTRL : std_logic_vector(7 DOWNTO 0) := "01000000";
   constant LO_THRESH_PTR : std_logic_vector(7 DOWNTO 0) := "00000010";
-  constant LO_THRESH : std_logic_vector(15 DOWNTO 0) := X"0010";
+  -- constant LO_THRESH : std_logic_vector(15 DOWNTO 0) := X"0010";
   constant HI_THRESH_PTR : std_logic_vector(7 DOWNTO 0) := "00000011";
-  constant HI_THRESH : std_logic_vector(15 DOWNTO 0) := X"4010";
+  -- constant HI_THRESH : std_logic_vector(15 DOWNTO 0) := X"4010";
   constant ADC_CNV_PTR : std_logic_vector(7 DOWNTO 0) := "00000000";
   constant ADC_CFG_PTR : std_logic_vector(7 DOWNTO 0) := "00000001";
   constant ADC_VOLTAGE_CFG : std_logic_vector(15 DOWNTO 0) := X"9140";
@@ -136,8 +144,9 @@ ARCHITECTURE fsm OF HVPS_acq IS
     	-- COMP_POL : 0 (active low output)
     	-- COMP_LAT : 0 (not latching)
     	-- COMP_QUE : 00 (assert after one)
- 	constant ADC_CURRENT_CFG : std_logic_vector(15 DOWNTO 0) := X"B140";
+ 	constant ADC_CURRENT_CFG : std_logic_vector(15 DOWNTO 0) := X"B143";
     	-- MUX = 011 (AIN2/AIN3)
+     -- COMP_QUE : 11 (disabled)
 
   constant DAC_SETPOINT_OFFSET : integer := 4;
   constant DAC_READBACK_OFFSET : integer := 5;
@@ -166,7 +175,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
   end function int2slv;
 BEGIN
   FSM : PROCESS (clk) IS
-    Variable ChanCfg : std_logic_vector(5 DOWNTO 0);
+    Variable ChanCfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0);
  
     PROCEDURE start_txn(W,R,Sta,Sto : IN std_logic;
       wD : IN std_logic_vector(7 DOWNTO 0);
@@ -271,7 +280,7 @@ BEGIN
       return;
     END PROCEDURE chan_loop_iterate;
     
-    FUNCTION mux_bit(cfg : std_logic_vector(5 DOWNTO 0))
+    FUNCTION mux_bit(cfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0))
         return std_logic_vector IS
       Variable slv : std_logic_vector(7 DOWNTO 0);
     BEGIN
@@ -285,17 +294,47 @@ BEGIN
       return slv;
     END FUNCTION mux_bit;
 
-    PURE FUNCTION mux_addr(cfg : std_logic_vector(5 DOWNTO 0))
+    PURE FUNCTION mux_addr(cfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0))
         return std_logic_vector IS
     BEGIN
       return  MUX_I2C_PREFIX & cfg(5 DOWNTO 3) & '0';
     END FUNCTION mux_addr;
 
-    PURE FUNCTION mux_clr_bit(cfg : std_logic_vector(5 DOWNTO 0))
+    PURE FUNCTION mux_clr_bit(cfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0))
         return std_logic IS
     BEGIN
       return  cfg(0);
     END FUNCTION mux_clr_bit;
+    
+    FUNCTION hi_threshold(cfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0))
+        return std_logic_vector IS
+      Variable thresh : std_logic_vector(15 DOWNTO 0);
+    BEGIN
+      CASE cfg(8 DOWNTO 6) IS
+        WHEN "000" => thresh := X"3333"; -- 200 Volts
+        WHEN "001" => thresh := X"1999"; -- 400 Volts
+        WHEN "010" => thresh := X"0CCC"; -- (-)800 Volts
+        WHEN "011" => thresh := X"051E"; -- 2000 Volts
+        WHEN "100" => thresh := X"0369"; -- 3000 Volts
+        WHEN OTHERS => thresh := X"0000";
+      END CASE;
+      return thresh;
+    END FUNCTION hi_threshold;
+    
+    FUNCTION lo_threshold(cfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0))
+        return std_logic_vector IS
+      Variable thresh : std_logic_vector(15 DOWNTO 0);
+    BEGIN
+      CASE cfg(8 DOWNTO 6) IS
+        WHEN "000" => thresh := X"2CCC"; -- 200 Volts
+        WHEN "001" => thresh := X"1666"; -- 400 Volts
+        WHEN "010" => thresh := X"0B33"; -- (-)800 Volts
+        WHEN "011" => thresh := X"047A"; -- 2000 Volts
+        WHEN "100" => thresh := X"02FC"; -- 3000 Volts
+        WHEN OTHERS => thresh := X"0000";
+      END CASE;
+      return thresh;
+    END FUNCTION lo_threshold;
 
   BEGIN
     IF clk'EVENT AND clk = '1' THEN
@@ -541,9 +580,11 @@ BEGIN
             
           WHEN S1_LOOP_INIT => -- Initialize Channel
             err_recovery_nxt <= S1_LOOP_INIT_2; -- skip to DAC
-            start_adc_wr(LO_THRESH_PTR, LO_THRESH, S1_LOOP_INIT_1);
+            ChanCfg := ChanCfgs(conv_integer(Chan));
+            start_adc_wr(LO_THRESH_PTR, lo_threshold(ChanCfg), S1_LOOP_INIT_1);
           WHEN S1_LOOP_INIT_1 =>
-            start_adc_wr(HI_THRESH_PTR, HI_THRESH, S1_LOOP_INIT_2);
+            ChanCfg := ChanCfgs(conv_integer(Chan));
+            start_adc_wr(HI_THRESH_PTR, hi_threshold(ChanCfg), S1_LOOP_INIT_2);
               
           -- Configure DAC if necessary, but defaults look good
           -- Write 0 to DAC

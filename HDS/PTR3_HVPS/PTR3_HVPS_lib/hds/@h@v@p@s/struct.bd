@@ -35,6 +35,8 @@ value "16"
 name "N_CHANNELS"
 type "integer"
 value "N_CHANNELS"
+po "--CHANCFGBITS : integer                  := 9"
+apo 0
 )
 ]
 mwi 0
@@ -183,19 +185,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\PTR3S\\PTR3_HVPS\\HDS\\PTR3_HVPS\\PT
 )
 (vvPair
 variable "date"
-value "11/30/2016"
+value "12/ 6/2016"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Tue"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "30"
+value "06"
 )
 (vvPair
 variable "entity_name"
@@ -223,7 +225,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/30/16"
+value "12/06/16"
 )
 (vvPair
 variable "graphical_source_group"
@@ -231,7 +233,7 @@ value "Domain Users"
 )
 (vvPair
 variable "graphical_source_time"
-value "15:25:01"
+value "13:49:42"
 )
 (vvPair
 variable "group"
@@ -259,7 +261,7 @@ value "$HDS_PROJECT_DIR/PTR3_HVPS_lib/work"
 )
 (vvPair
 variable "mm"
-value "11"
+value "12"
 )
 (vvPair
 variable "module_name"
@@ -267,11 +269,11 @@ value "HVPS"
 )
 (vvPair
 variable "month"
-value "Nov"
+value "Dec"
 )
 (vvPair
 variable "month_long"
-value "November"
+value "December"
 )
 (vvPair
 variable "p"
@@ -335,7 +337,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "15:27:37"
+value "13:50:44"
 )
 (vvPair
 variable "unit"
@@ -387,7 +389,7 @@ va (VaSet
 fg "0,0,32768"
 bg "0,0,32768"
 )
-xt "68200,78000,76900,79000"
+xt "68200,78000,77000,79000"
 st "
 by %user on %dd %month %year
 "
@@ -1054,10 +1056,11 @@ uid 320,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "59700,56500,90700,58900"
+xt "59700,56500,90700,59700"
 st "ADDR_WIDTH = ADDR_WIDTH    ( integer range 16 downto 8 )  
 WORD_SIZE  = 16            ( integer                   )  
-N_CHANNELS = N_CHANNELS    ( integer                   )  "
+N_CHANNELS = N_CHANNELS    ( integer                   )  
+--CHANCFGBITS : integer                  := 9"
 )
 header ""
 )
@@ -1076,6 +1079,8 @@ value "16"
 name "N_CHANNELS"
 type "integer"
 value "N_CHANNELS"
+po "--CHANCFGBITS : integer                  := 9"
+apo 0
 )
 ]
 )
@@ -2479,8 +2484,7 @@ isHidden 1
 font "Courier New,8,0"
 )
 xt "57000,56200,92000,57000"
-st "I2C_CLK_PRESCALE = X\"00BC\"    ( std_logic_vector (15 DOWNTO 0) )  
-"
+st "I2C_CLK_PRESCALE = X\"00BC\"    ( std_logic_vector (15 DOWNTO 0) )  "
 )
 header ""
 )
@@ -6155,7 +6159,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 3574,0
+lastUid 3901,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
