@@ -311,11 +311,11 @@ BEGIN
       Variable thresh : std_logic_vector(15 DOWNTO 0);
     BEGIN
       CASE cfg(8 DOWNTO 6) IS
-        WHEN "000" => thresh := X"3333"; -- 200 Volts
-        WHEN "001" => thresh := X"1999"; -- 400 Volts
-        WHEN "010" => thresh := X"0CCC"; -- (-)800 Volts
-        WHEN "011" => thresh := X"051E"; -- 2000 Volts
-        WHEN "100" => thresh := X"0369"; -- 3000 Volts
+        WHEN "000" => thresh := X"14D5"; -- 200 Volts
+        WHEN "001" => thresh := X"0A6A"; -- 400 Volts
+        WHEN "010" => thresh := X"0535"; -- (-)800 Volts
+        WHEN "011" => thresh := X"0215"; -- 2000 Volts
+        WHEN "100" => thresh := X"0163"; -- 3000 Volts
         WHEN OTHERS => thresh := X"0000";
       END CASE;
       return thresh;
@@ -326,11 +326,11 @@ BEGIN
       Variable thresh : std_logic_vector(15 DOWNTO 0);
     BEGIN
       CASE cfg(8 DOWNTO 6) IS
-        WHEN "000" => thresh := X"2CCC"; -- 200 Volts
-        WHEN "001" => thresh := X"1666"; -- 400 Volts
-        WHEN "010" => thresh := X"0B33"; -- (-)800 Volts
-        WHEN "011" => thresh := X"047A"; -- 2000 Volts
-        WHEN "100" => thresh := X"02FC"; -- 3000 Volts
+        WHEN "000" => thresh := X"123A"; -- 200 Volts
+        WHEN "001" => thresh := X"091D"; -- 400 Volts
+        WHEN "010" => thresh := X"048E"; -- (-)800 Volts
+        WHEN "011" => thresh := X"01D2"; -- 2000 Volts
+        WHEN "100" => thresh := X"0137"; -- 3000 Volts
         WHEN OTHERS => thresh := X"0000";
       END CASE;
       return thresh;
