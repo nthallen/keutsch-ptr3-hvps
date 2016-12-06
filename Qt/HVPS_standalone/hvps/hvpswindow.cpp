@@ -16,7 +16,7 @@ hvpsWindow::hvpsWindow() {
   chans[0] = new hvps_channel(1, "Uql", layout, ++row, 200, 1, "V", 200, 1, "V");
   chans[1] = new hvps_channel(2, "Udrift", layout, ++row, 200, 1, "V", 200, 1, "V");
   chans[2] = new hvps_channel(3, "UTEx", layout, ++row, 400, 1, "V", 400, 1, "V");
-  chans[3] = new hvps_channel(4, "USref", layout, ++row, -500, 1, "V", -500, 1, "V");
+  chans[3] = new hvps_channel(4, "USref", layout, ++row, -800, 1, "V", -800, 1, "V");
   chans[4] = new hvps_channel(5, "USDefA", layout, ++row, 2000, 0, "V", 2, 3, "mA");
   chans[5] = new hvps_channel(6, "USDA", layout, ++row, 2000, 0, "V", 2, 3, "mA");
   chans[6] = new hvps_channel(7, "USA", layout, ++row, 3000, 0, "V", 1.3, 3, "mA");
