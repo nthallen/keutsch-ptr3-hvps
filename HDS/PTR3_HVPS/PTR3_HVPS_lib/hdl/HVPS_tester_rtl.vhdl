@@ -560,12 +560,14 @@ BEGIN
     sbrd(X"0034");
     assert ReadData = X"0000" report "Setpoint readback should be zero after reinit"
       severity error;
-    sbwr(X"0034",X"4321",'1');
-    wait for 45 ms;
-    sbrd(X"0034");
-    assert ReadData = X"4321" report "Readback after reinit failed" severity error;
+    sbwr(X"0044",X"4321",'1');
+    wait for 20 ms;
+    sbrd(X"0044");
+    assert ReadData /= X"4321" report "Readback from disabled channel succeeded" severity error;
+    sbwr(X"0034",X"1234",'1');
     wait for 100 ms;
     sbrd(X"0034");
+    assert ReadData = X"1234" report "Readback after disabled channel failed" severity error;
 
     SimDone <= '1';
     wait;

@@ -68,7 +68,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
     S1_ADC_ERR, S1_ADC_ERR_1,
     S1_DAC_ERR, S1_DAC_ERR_1,
     S1_INIT, S1_INIT_1, S1_INIT_2, S1_INIT_3, S1_INIT_4,
-    S1_LOOP, S1_LOOP_1, S1_LOOP_2,
+    S1_LOOP, S1_LOOP_1, S1_LOOP_2, S1_LOOP_3,
     S1_LOOP_INIT, S1_LOOP_INIT_1, S1_LOOP_INIT_2, S1_LOOP_INIT_2A,
     S1_LOOP_INIT_3, S1_LOOP_INIT_4,
     S1_LOOP_ADCIRD, S1_LOOP_ADCIWR, S1_LOOP_ADCVCFG,
@@ -523,6 +523,7 @@ BEGIN
             err_recovery_nxt <= S1_LOOP1_ITER;
             crnt_state1 <= S1_LOOP_1;
           WHEN S1_LOOP_1 =>
+            err_recovery_nxt <= S1_LOOP_3;
             ChanCfg := ChanCfgs(conv_integer(Chan));
             start_mux_wr(mux_bit(ChanCfg), S1_LOOP_2);
           WHEN S1_LOOP_2 =>
@@ -531,6 +532,12 @@ BEGIN
             ELSE
               crnt_state1 <= S1_LOOP_ADCIRD;
             END IF;
+          WHEN S1_LOOP_3 =>
+            IF WrEn2 = '1' AND ChanAddr2 = Chan THEN
+              -- Discard write to disabled channel
+              WrAck2 <= '1';
+            END IF;
+            crnt_state1 <= S1_LOOP1_ITER;
             
           WHEN S1_LOOP_INIT => -- Initialize Channel
             err_recovery_nxt <= S1_LOOP_INIT_2; -- skip to DAC
@@ -574,6 +581,7 @@ BEGIN
           WHEN S1_LOOP_DAC_2 =>
             start_ram(conv_integer(Chan)*4+DAC_READBACK_OFFSET,RData,S1_LOOP1_ITER);
           WHEN S1_LOOP1_ITER =>
+            WrAck2 <= '0';
             chan_loop_iterate(S1_LOOP_1, S1_LOOP2_INIT);
             
           WHEN S1_LOOP2_INIT =>
