@@ -125,6 +125,7 @@ public:
     uint16_t read_data;
   } reply_data;
   static Subbus SB;
+  static bool timed_out;
 };
 
 class Internal_Subbus_client : Subbus_client {

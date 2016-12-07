@@ -405,6 +405,7 @@ void Subbus::init() {
       port = 0;
     }
   }
+  nl_error(0, "%s", s.toLatin1().constData());
   emit statusChanged(s);
 }
 
@@ -519,6 +520,8 @@ int Subbus_client::write(uint16_t address, uint16_t data) {
 
 
 Subbus Subbus_client::SB;
+
+bool Subbus_client::timed_out = false;
 
 int Internal_Subbus_client::identify_board() {
   if (req_status != SBDR_IDLE) return 1;

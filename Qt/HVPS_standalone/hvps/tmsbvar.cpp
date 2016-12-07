@@ -31,6 +31,7 @@ void tmsbvar::ready() {
           value = reply_data.read_data;
           read_pending = false;
           fresh = true;
+          Subbus_client::timed_out = false;
           emit valueUpdated(true);
           break;
         case SBS_NOACK:
@@ -39,8 +40,11 @@ void tmsbvar::ready() {
           read_pending = false;
           break;
         case SBS_TIMEOUT:
-          nl_error(1, "Subbus timeout reading from %04X",
-                   request_data.d1.data);
+          if (!Subbus_client::timed_out) {
+            Subbus_client::timed_out = true;
+            nl_error(1, "Subbus timeout reading from %04X",
+                     request_data.d1.data);
+          }
           read_pending = false;
           break;
         default:
@@ -58,8 +62,11 @@ void tmsbvar::ready() {
                    request_data.d0.address);
           break;
         case SBS_TIMEOUT:
-          nl_error(1, "Subbus timeout writing to %04X",
-                   request_data.d0.address);
+          if (!Subbus_client::timed_out) {
+            Subbus_client::timed_out = true;
+            nl_error(1, "Subbus timeout writing to %04X",
+                     request_data.d0.address);
+          }
           break;
         default:
           nl_error(2, "Unexpected subbus response %d writing to %04X",
