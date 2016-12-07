@@ -19,7 +19,7 @@ hvps_channel::hvps_channel(int chan, QString name,
   uint16_t base_addr = hvps_base_addr + chan*4;
   grid->addWidget(new QLabel(name + " " + QString::number(range1) + ":"),
                   row, hvpsWindow::label_col);
-  cmd = new sbcmdbox(base_addr+setpoint_offset, range1, prec1-1);
+  cmd = new sbcmdbox(base_addr+setpoint_offset, range1, prec1-2);
   grid->addWidget(cmd->widget, row, hvpsWindow::cmd_col);
 
   setpoint_var = new adc_tmsbvar(base_addr+dac_offset, false,
