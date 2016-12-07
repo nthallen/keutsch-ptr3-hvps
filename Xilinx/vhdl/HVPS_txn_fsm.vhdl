@@ -26,7 +26,7 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
+USE ieee.std_logic_unsigned.all;
 
 ENTITY HVPS_txn IS
    GENERIC( I2C_CLK_PRESCALE : std_logic_vector (15 DOWNTO 0) := X"000E" );
@@ -43,6 +43,7 @@ ENTITY HVPS_txn IS
       wb_inta_o : IN     std_logic;
       Done      : OUT    std_logic;
       Err       : OUT    std_logic;
+      Timeout   : OUT    std_logic;
       i2c_rdata : OUT    std_logic_vector (7 DOWNTO 0);
       wb_adr_i  : OUT    std_logic_vector (2 DOWNTO 0);
       wb_cyc_i  : OUT    std_logic;
@@ -71,6 +72,28 @@ ARCHITECTURE fsm OF HVPS_txn IS
    SIGNAL current_s2 : S2_TYPE;
    SIGNAL Rd_req, Start_req, Stop_req : std_logic;
    SIGNAL IA_req : std_logic;
+   SIGNAL timeout_cnt : std_logic_vector (14 DOWNTO 0);
+  
+  function int2slv(val : IN integer; len : IN integer)
+  return std_logic_vector is
+    Variable bit : integer range 0 to 16;
+    Variable rval : integer range 0 to 65535;
+    Variable slv : std_logic_vector(len-1 DOWNTO 0);
+  begin
+    bit := 0;
+    rval := val;
+    slv := (others => '0');
+    while bit < len loop
+      if rval mod 2 > 0 then
+        slv(bit) := '1';
+      else
+        slv(bit) := '0';
+      end if;
+      rval := rval / 2;
+      bit := bit + 1;
+    end loop;
+    return slv;
+  end function int2slv;
 BEGIN
   machine : PROCESS (clk)
     VARIABLE cmd : std_logic_vector(3 DOWNTO 0);
@@ -92,6 +115,8 @@ BEGIN
         Start_req <= '0';
         Stop_req <= '0';
         IA_req <= '0';
+        timeout_cnt <= (others => '0');
+        Timeout <= '0';
       ELSE
         
         CASE current_s2 IS
@@ -243,6 +268,7 @@ BEGIN
             IF (wb_ack_o = '1') THEN
               wb_cyc_i <= '0';
               wb_stb_i <= '0';
+              timeout_cnt <= int2slv(20000,15);
               current_s2 <= S2_WNACK;
             ELSE
               current_s2 <= S2_WACK;
@@ -264,8 +290,14 @@ BEGIN
           WHEN S2_WIACK =>
             IF (wb_inta_o = '1') THEN
               IA_req <= '0';
+              Timeout <= '0';
               current_s2 <= S2_IDLE;
             ELSE
+              IF (conv_integer(timeout_cnt) = 0) THEN
+                Timeout <= '1';
+              ELSE
+                timeout_cnt <= timeout_cnt-1;
+              END IF;
               current_s2 <= S2_WIACK;
             END IF;
           WHEN OTHERS =>

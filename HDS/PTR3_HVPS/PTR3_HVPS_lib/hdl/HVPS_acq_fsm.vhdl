@@ -44,7 +44,8 @@ ENTITY HVPS_acq IS
       WrEn1     : OUT    std_logic;
       i2c_wdata : OUT    std_logic_vector (7 DOWNTO 0);
       wData1    : OUT    std_logic_vector (15 DOWNTO 0);
-      RdStat    : IN     std_logic
+      RdStat    : IN     std_logic;
+      Timeout   : IN     std_logic
    );
 
 -- Declarations
@@ -101,6 +102,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
   SIGNAL adc_wr_data : std_logic_vector(15 DOWNTO 0);
   SIGNAL dac_reg_data : std_logic_vector(7 DOWNTO 0);
   SIGNAL dac_wr_data : std_logic_vector(15 DOWNTO 0);
+  SIGNAL over_thresh : std_logic_vector(N_CHANNELS-1 DOWNTO 0);
   SIGNAL mux_cfg : std_logic_vector(7 DOWNTO 0);
   constant CHANCFGBITS : integer := 9;
   TYPE Cfg_t is array (0 TO N_CHANNELS-1) of std_logic_vector(CHANCFGBITS-1 DOWNTO 0);
@@ -134,7 +136,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
   -- constant HI_THRESH : std_logic_vector(15 DOWNTO 0) := X"4010";
   constant ADC_CNV_PTR : std_logic_vector(7 DOWNTO 0) := "00000000";
   constant ADC_CFG_PTR : std_logic_vector(7 DOWNTO 0) := "00000001";
-  constant ADC_VOLTAGE_CFG : std_logic_vector(15 DOWNTO 0) := X"9140";
+  constant ADC_VOLTAGE_CFG : std_logic_vector(15 DOWNTO 4) := X"914";
     	-- OS = 1: begin single conversion
     	-- MUX = 001 (AIN0/AIN3) or 000 (AIN0/AIN1)
     	-- PGA = 000 +/-6.144V
@@ -144,9 +146,11 @@ ARCHITECTURE fsm OF HVPS_acq IS
     	-- COMP_POL : 0 (active low output)
     	-- COMP_LAT : 0 (not latching)
     	-- COMP_QUE : 00 (assert after one)
- 	constant ADC_CURRENT_CFG : std_logic_vector(15 DOWNTO 0) := X"B143";
+ 	constant ADC_CURRENT_CFG : std_logic_vector(15 DOWNTO 4) := X"B14";
     	-- MUX = 011 (AIN2/AIN3)
      -- COMP_QUE : 11 (disabled)
+  constant ADC_LED_ON : std_logic_vector(3 DOWNTO 0) := "1011";
+  constant ADC_LED_OFF : std_logic_vector(3 DOWNTO 0) := "0000";
 
   constant DAC_SETPOINT_OFFSET : integer := 4;
   constant DAC_READBACK_OFFSET : integer := 5;
@@ -176,6 +180,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
 BEGIN
   FSM : PROCESS (clk) IS
     Variable ChanCfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0);
+    Variable adc_led_cfg : std_logic_vector(3 DOWNTO 0);
  
     PROCEDURE start_txn(W,R,Sta,Sto : IN std_logic;
       wD : IN std_logic_vector(7 DOWNTO 0);
@@ -350,6 +355,7 @@ BEGIN
         Stop <= '0';
         i2c_wdata <= X"00";
         crnt_state1 <= S1_INIT;
+        over_thresh <= (others => '0');
       ELSE
         IF RdStat = '1' THEN
           Fresh <= '0';
@@ -367,6 +373,8 @@ BEGIN
               crnt_state1 <= txn_err;
             ELSIF Done = '1' THEN
               crnt_state1 <= txn_nxt;
+            ELSIF Timeout = '1' THEN
+              crnt_state1 <= S1_INIT;
             ELSE
               crnt_state1 <= S1_TXN_1;
             END IF;
@@ -560,7 +568,11 @@ BEGIN
             Fresh <= '1'; -- If still '1' at the end, we have fresh data
             Chan <= (OTHERS => '0');
             err_recovery_nxt <= S1_LOOP1_ITER;
-            crnt_state1 <= S1_LOOP_1;
+            IF (Timeout = '0' AND (Done = '1' OR Err = '1')) THEN
+              crnt_state1 <= S1_LOOP_1;
+            ELSE
+              crnt_state1 <= S1_LOOP;
+            END IF;
           WHEN S1_LOOP_1 =>
             err_recovery_nxt <= S1_LOOP_3;
             ChanCfg := ChanCfgs(conv_integer(Chan));
@@ -607,7 +619,12 @@ BEGIN
             
           WHEN S1_LOOP_ADCVCFG => -- Configure Channel Voltage reading
             err_recovery_nxt <= S1_LOOP_DAC;
-            start_adc_wr(ADC_CFG_PTR, ADC_VOLTAGE_CFG, S1_LOOP_DAC);
+            IF (over_thresh(conv_integer(Chan)) = '1') THEN
+              adc_led_cfg := ADC_LED_ON;
+            ELSE
+              adc_led_cfg := ADC_LED_OFF;
+            END IF;
+            start_adc_wr(ADC_CFG_PTR, ADC_VOLTAGE_CFG & adc_led_cfg, S1_LOOP_DAC);
           WHEN S1_LOOP_DAC =>
             err_recovery_nxt <= S1_LOOP1_ITER;
             IF WrEn2 = '1' AND ChanAddr2 = Chan THEN
@@ -632,9 +649,22 @@ BEGIN
           WHEN S1_LOOP_ADCVRD => -- Read latest converted value
             start_adc_rd(S1_LOOP_ADCVWR);
           WHEN S1_LOOP_ADCVWR => -- And write current to ram
+            ChanCfg := ChanCfgs(conv_integer(Chan));
+            IF (over_thresh(conv_integer(Chan)) = '0') THEN
+              IF (RData > hi_threshold(ChanCfg)) THEN
+                over_thresh(conv_integer(Chan)) <= '1';
+              END IF;
+            ELSIF (RData < lo_threshold(ChanCfg)) THEN
+              over_thresh(conv_integer(Chan)) <= '0';
+            END IF;
             start_ram(conv_integer(Chan)*4+ADC_VOLTAGE_OFFSET,RData,S1_LOOP_ADCICFG);
           WHEN S1_LOOP_ADCICFG => -- Configure Channel Current reading
-            start_adc_wr(ADC_CFG_PTR, ADC_CURRENT_CFG, S1_LOOP2_ITER);
+            IF (over_thresh(conv_integer(Chan)) = '1') THEN
+              adc_led_cfg := ADC_LED_ON;
+            ELSE
+              adc_led_cfg := ADC_LED_OFF;
+            END IF;
+            start_adc_wr(ADC_CFG_PTR, ADC_CURRENT_CFG & adc_led_cfg, S1_LOOP2_ITER);
           WHEN S1_LOOP2_ITER =>
             chan_loop_iterate(S1_LOOP2_INIT, S1_LOOP_END);
             

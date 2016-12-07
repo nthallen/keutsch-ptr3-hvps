@@ -517,6 +517,8 @@ BEGIN
       end loop;
       return slv;
     end function int2slv;
+    
+    Variable test_opt : integer := 1;
   BEGIN
     ExpAddr <= (others => '0');
     wData <= (others => '0');
@@ -541,33 +543,42 @@ BEGIN
     m7_sda <= (others => 'H');
     m8_scl <= (others => 'H');
     m8_sda <= (others => 'H');
-    mux_en <= (1 => '1', others => '0');
+    mux_en <= (others => '1');
     rst <= '1';
     -- pragma synthesis_off
     wait until clk_100MHz'EVENT AND clk_100MHz = '1';
     wait until clk_100MHz'EVENT AND clk_100MHz = '1';
     rst <= '0';
     wait for 5 ms;
-    sbrd(X"0034");
-    sbwr(X"0034",X"1234",'1');
-    wait for 100 ms;
-    sbrd(X"0034");
-    assert ReadData = X"1234" report "Readback failed" severity error;
-    mux_en(1) <= '0';
-    wait for 20 ms;
-    mux_en(1) <= '1';
-    wait for 20 ms;
-    sbrd(X"0034");
-    assert ReadData = X"0000" report "Setpoint readback should be zero after reinit"
-      severity error;
-    sbwr(X"0044",X"4321",'1');
-    wait for 20 ms;
-    sbrd(X"0044");
-    assert ReadData /= X"4321" report "Readback from disabled channel succeeded" severity error;
-    sbwr(X"0034",X"1234",'1');
-    wait for 100 ms;
-    sbrd(X"0034");
-    assert ReadData = X"1234" report "Readback after disabled channel failed" severity error;
+    if (test_opt = 1) then
+      mux_en <= (1 => '1', others => '0');
+      sbrd(X"0034");
+      sbwr(X"0034",X"1234",'1');
+      wait for 100 ms;
+      sbrd(X"0034");
+      assert ReadData = X"1234" report "Readback failed" severity error;
+      mux_en(1) <= '0';
+      wait for 20 ms;
+      mux_en(1) <= '1';
+      wait for 20 ms;
+      sbrd(X"0034");
+      assert ReadData = X"0000" report "Setpoint readback should be zero after reinit"
+        severity error;
+      sbwr(X"0044",X"4321",'1');
+      wait for 20 ms;
+      sbrd(X"0044");
+      assert ReadData /= X"4321" report "Readback from disabled channel succeeded" severity error;
+      sbwr(X"0034",X"1234",'1');
+      wait for 100 ms;
+      sbrd(X"0034");
+      assert ReadData = X"1234" report "Readback after disabled channel failed" severity error;
+    else
+      wait for 20 ms;
+      scl <= '0';
+      wait for 20 ms;
+      scl <= 'H';
+      wait for 80 ms;
+    end if;
 
     SimDone <= '1';
     wait;
