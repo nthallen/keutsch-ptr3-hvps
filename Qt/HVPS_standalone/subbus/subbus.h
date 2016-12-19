@@ -51,9 +51,12 @@ public:
 public slots:
   void ProcessData();
   void ProcessTimeout();
+  void SerialError(QSerialPort::SerialPortError error);
 
 signals:
   void statusChanged(QString);
+  void subbus_initialized();
+  void subbus_closed();
 
 private:
   void process_request();

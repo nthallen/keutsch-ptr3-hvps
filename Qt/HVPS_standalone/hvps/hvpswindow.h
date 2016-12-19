@@ -7,6 +7,8 @@
 #include "hvps_channel.h"
 #include "hvps_status.h"
 
+enum hvpsWindowState { ws_init, ws_looping, ws_acquire, ws_slow_poll };
+
 class hvpsWindow : public QObject {
   Q_OBJECT
 public:
@@ -22,6 +24,9 @@ public:
   static const int n_cols = 7;
 public slots:
   void acquire();
+  void init();
+  void start_acquisition();
+  void suspend_acquisition();
 private:
   QWidget *window;
   QGridLayout *layout;
@@ -29,6 +34,7 @@ private:
   hvps_status *tmstat;
   QTimer poll;
   QLabel *status;
+  hvpsWindowState state;
 };
 
 #endif // HVPSWINDOW_H

@@ -1,3 +1,6 @@
+#include <QSettings>
+// #include <QMessageBox>
+#include <QInputDialog>
 #include <string.h>
 #include <ctype.h>
 #include "subbus.h"
@@ -13,6 +16,7 @@ Subbus::Subbus() {
   port = 0;
   cur_req = 0;
   nc = 0;
+  IntClt = new Internal_Subbus_client;
   timer = new QTimer(this);
   timer->setSingleShot(true);
   connect(timer, &QTimer::timeout, this, &Subbus::ProcessTimeout);
@@ -23,6 +27,10 @@ Subbus::~Subbus() {
   if (port) {
     delete(port);
     port = 0;
+  }
+  if (IntClt) {
+    delete(IntClt);
+    IntClt = 0;
   }
 }
 
@@ -361,52 +369,96 @@ int Subbus::read_hex( char **sp, unsigned short *arg ) {
   return 1;
 }
 
+enum port_status { PORT_NOT_FOUND, PORT_BUSY, PORT_OK };
+
 void Subbus::init() {
   if (port) {
     emit statusChanged("Serial port already opened");
     return;
   }
   const auto infos = QSerialPortInfo::availablePorts();
-  int nports = infos.size();
-  QString s = "nports = " + QString::number(nports) + "\n";
+  QSettings settings;
+  QString selected_port = settings.value("SerialPort").toString();
+  port_status selected_port_status = PORT_NOT_FOUND;
+  QStringList ports;
+  QString s;
   for (const auto info : infos) {
-    s += info.portName() + " Mfr: " + info.manufacturer();
+    QString curPort = info.portName();
+//    QString desc = info.description();
+//    QString mfg = info.manufacturer();
+//    QString sn = info.serialNumber();
+//    QString s = curPort + ": " + desc + " Mfg: " + mfg + " sn: " + sn;
+//    nl_error(0, "%s", s.toLatin1().constData());
     if (info.isBusy()) {
-      s += " Busy\n";
-    } else if (portName.isEmpty()){
-      portName = info.portName();
-      s += " *\n";
+      if (selected_port == curPort) {
+        selected_port_status = PORT_BUSY;
+      }
     } else {
-      s += "\n";
+      if (selected_port == curPort)
+        selected_port_status = PORT_OK;
+      ports << curPort;
     }
   }
-  if (portName.isEmpty()) {
-    s += "No free serial port located";
+
+  if (selected_port_status == PORT_OK){
+    portName = selected_port;
   } else {
-    port = new QSerialPort(portName);
-    if (port->open(QIODevice::ReadWrite)) {
-      connect(port, &QSerialPort::readyRead,
-              this, &Subbus::ProcessData);
-      s += "Opened successfully: baud=" +
-          QString::number(port->baudRate()) + "\n";
-      int nflush = 0;
-      while (port->bytesAvailable()) {
-        char buf[80];
-        int nb = port->bytesAvailable();
-        if (nb > 79) nb = 79;
-        nflush += port->read(buf, nb);
-      }
-      if (nflush > 0) s += "Flushed " + QString::number(nflush) + " bytes\n";
-      IntClt = new Internal_Subbus_client;
-      IntClt->identify_board();
-    } else {
-      s += "Error " + QString::number(port->error()) + " on open";
-      delete port;
-      port = 0;
+    QString msg;
+    if (!selected_port.isEmpty()) {
+       QString reason = selected_port_status == PORT_BUSY ?
+            "BUSY" : "not found";
+       msg = "Previously selected port '" + selected_port + "' " +
+           reason + "\n";
     }
+    if (ports.isEmpty()) {
+      msg += "No free serial port located";
+      emit statusChanged("No serial port");
+      emit subbus_closed();
+      return;
+    } else if (ports.length() > 1 || !msg.isEmpty()) {
+      bool OK = false;
+      msg += "Select a port from the list: ";
+      selected_port = QInputDialog::getItem(0,
+          "Select COM Port", msg, ports, 0, false, &OK);
+      if (OK) {
+        portName = selected_port;
+      } else {
+        emit subbus_closed();
+        return;
+      }
+    } else {
+      nl_assert(ports.length() == 1);
+      portName = ports[0];
+    }
+  }
+  settings.setValue("SerialPort", portName);
+  port = new QSerialPort(portName);
+  connect(port,
+    static_cast<void(QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
+    this, &Subbus::SerialError, Qt::QueuedConnection);
+  if (port->open(QIODevice::ReadWrite)) {
+    int nflush = 0;
+    while (port->bytesAvailable()) {
+      char buf[80];
+      int nb = port->bytesAvailable();
+      if (nb > 79) nb = 79;
+      nflush += port->read(buf, nb);
+    }
+    connect(port, &QSerialPort::readyRead,
+            this, &Subbus::ProcessData);
+    IntClt->identify_board();
   }
   nl_error(0, "%s", s.toLatin1().constData());
   emit statusChanged(s);
+}
+
+void Subbus::SerialError(QSerialPort::SerialPortError error) {
+  if (error != QSerialPort::NoError) {
+    nl_error(2, "SerialPortError %d", error);
+    delete port;
+    port = 0;
+    emit subbus_closed();
+  }
 }
 
 /* Return non-zero on error */
@@ -536,4 +588,5 @@ void Internal_Subbus_client::ready() {
   } else {
     SB.statusChanged("Status: " + QString::number(cmd_status));
   }
+  SB.subbus_initialized();
 }

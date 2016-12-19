@@ -1,7 +1,10 @@
+#include <QMessageBox>
+#include <QApplication>
 #include "hvpswindow.h"
 #include "subbus.h"
 
 hvpsWindow::hvpsWindow() {
+  state = ws_init;
   window = new QWidget;
   layout = new QGridLayout;
   status = new QLabel("Start");
@@ -29,13 +32,14 @@ hvpsWindow::hvpsWindow() {
   status->setStyleSheet("border: 1px solid black");
   connect(&Subbus_client::SB, &Subbus::statusChanged,
           status, &QLabel::setText);
+  connect(&Subbus_client::SB, &Subbus::subbus_initialized,
+          this, &hvpsWindow::start_acquisition);
+  connect(&Subbus_client::SB, &Subbus::subbus_closed,
+          this, &hvpsWindow::suspend_acquisition);
   window->setLayout(layout);
   window->show();
-  Subbus_client::SB.init();
-
-  connect(&poll, &QTimer::timeout, this, &hvpsWindow::acquire);
-  poll.setSingleShot(false);
-  poll.start(500);
+  init();
+  state = ws_looping;
 }
 
 hvpsWindow::~hvpsWindow() {
@@ -56,4 +60,47 @@ void hvpsWindow::acquire() {
     }
   }
   tmstat->acquire();
+}
+
+void hvpsWindow::init() {
+  Subbus_client::SB.init();
+  if (state != ws_slow_poll) {
+    state = ws_slow_poll;
+  }
+}
+
+void hvpsWindow::start_acquisition() {
+  poll.stop();
+  if (state == ws_slow_poll) {
+    disconnect(&poll, &QTimer::timeout, this, &hvpsWindow::init);
+  }
+  if (state != ws_acquire) {
+    connect(&poll, &QTimer::timeout, this, &hvpsWindow::acquire);
+    state = ws_acquire;
+  }
+  poll.setSingleShot(false);
+  poll.start(500);
+}
+
+void hvpsWindow::suspend_acquisition() {
+  poll.stop();
+  if (state == ws_acquire) {
+    disconnect(&poll, &QTimer::timeout, this, &hvpsWindow::acquire);
+  }
+  if (state != ws_slow_poll) {
+    state = ws_slow_poll;
+  }
+  QMessageBox::StandardButton response =
+    QMessageBox::warning(0, "Serial Connection",
+                         "Serial Port Initialization Failed",
+                       QMessageBox::Abort|QMessageBox::Retry);
+  if (response == QMessageBox::Abort) {
+    if (state == ws_looping) {
+      QApplication::quit();
+    } else {
+      exit(0);
+    }
+  } else {
+    init();
+  }
 }
