@@ -143,14 +143,13 @@ ARCHITECTURE fsm OF HVPS_acq IS
     	-- Mode = 1: power-down single-shot mode
     	-- DR = 010 : 32 SPS (fast enough to convert two channels within 0.1 sec)
     	-- COMP_MODE : 0 (traditional with hysteresis)
-    	-- COMP_POL : 0 (active low output)
-    	-- COMP_LAT : 0 (not latching)
-    	-- COMP_QUE : 00 (assert after one)
  	constant ADC_CURRENT_CFG : std_logic_vector(15 DOWNTO 4) := X"B14";
     	-- MUX = 011 (AIN2/AIN3)
-     -- COMP_QUE : 11 (disabled)
   constant ADC_LED_ON : std_logic_vector(3 DOWNTO 0) := "1011";
-  constant ADC_LED_OFF : std_logic_vector(3 DOWNTO 0) := "0000";
+  constant ADC_LED_OFF : std_logic_vector(3 DOWNTO 0) := "0011";
+    	-- COMP_POL : 0 (active low output) 1 (active high output)
+    	-- COMP_LAT : 0 (not latching)
+    	-- COMP_QUE : 00 (assert after one) 11 (disabled)
 
   constant DAC_SETPOINT_OFFSET : integer := 4;
   constant DAC_READBACK_OFFSET : integer := 5;

@@ -176,7 +176,7 @@
       <outfile xil_pn:name="MBlaze_proc_sys_reset_0_wrapper.ngc"/>
       <outfile xil_pn:name="MBlaze_rs232_wrapper.ngc"/>
     </transform>
-    <transform xil_pn:end_ts="1481076822" xil_pn:in_ck="2885635772044430410" xil_pn:name="TRANEXT_xstsynthesize_virtex6" xil_pn:prop_ck="-4870887060799178802" xil_pn:start_ts="1481076757">
+    <transform xil_pn:end_ts="1481222119" xil_pn:in_ck="2885635772044430410" xil_pn:name="TRANEXT_xstsynthesize_virtex6" xil_pn:prop_ck="-4870887060799178802" xil_pn:start_ts="1481222054">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -194,11 +194,11 @@
       <outfile xil_pn:name="webtalk_pn.xml"/>
       <outfile xil_pn:name="xst"/>
     </transform>
-    <transform xil_pn:end_ts="1480439800" xil_pn:in_ck="-8532882551380778017" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="2906172671460162839" xil_pn:start_ts="1480439800">
+    <transform xil_pn:end_ts="1481222119" xil_pn:in_ck="-5973511628053208391" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="2906172671460162839" xil_pn:start_ts="1481222119">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
     </transform>
-    <transform xil_pn:end_ts="1481076907" xil_pn:in_ck="5554895579514754439" xil_pn:name="TRANEXT_ngdbuild_FPGA" xil_pn:prop_ck="-4727809311454429182" xil_pn:start_ts="1481076822">
+    <transform xil_pn:end_ts="1481222204" xil_pn:in_ck="-4318818129250836319" xil_pn:name="TRANEXT_ngdbuild_FPGA" xil_pn:prop_ck="-4727809311454429182" xil_pn:start_ts="1481222119">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -209,7 +209,7 @@
       <outfile xil_pn:name="hvps_nexys4.ngd"/>
       <outfile xil_pn:name="hvps_nexys4_ngdbuild.xrpt"/>
     </transform>
-    <transform xil_pn:end_ts="1481077070" xil_pn:in_ck="-331190687723696495" xil_pn:name="TRANEXT_map_virtex7" xil_pn:prop_ck="-2543691145936091892" xil_pn:start_ts="1481076907">
+    <transform xil_pn:end_ts="1481222366" xil_pn:in_ck="-4342560282526773717" xil_pn:name="TRANEXT_map_virtex7" xil_pn:prop_ck="-2543691145936091892" xil_pn:start_ts="1481222204">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -225,7 +225,7 @@
       <outfile xil_pn:name="hvps_nexys4_summary.xml"/>
       <outfile xil_pn:name="hvps_nexys4_usage.xml"/>
     </transform>
-    <transform xil_pn:end_ts="1481077157" xil_pn:in_ck="2083243536695393834" xil_pn:name="TRANEXT_par_virtex5" xil_pn:prop_ck="-2283627392121029586" xil_pn:start_ts="1481077070">
+    <transform xil_pn:end_ts="1481222457" xil_pn:in_ck="-8315802262018753852" xil_pn:name="TRANEXT_par_virtex5" xil_pn:prop_ck="-2283627392121029586" xil_pn:start_ts="1481222366">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -240,7 +240,7 @@
       <outfile xil_pn:name="hvps_nexys4_pad.txt"/>
       <outfile xil_pn:name="hvps_nexys4_par.xrpt"/>
     </transform>
-    <transform xil_pn:end_ts="1481077252" xil_pn:in_ck="-4804016287175128050" xil_pn:name="TRANEXT_bitFile_virtex7" xil_pn:prop_ck="-8509111891294559600" xil_pn:start_ts="1481077157">
+    <transform xil_pn:end_ts="1481222547" xil_pn:in_ck="-4804016287175128050" xil_pn:name="TRANEXT_bitFile_virtex7" xil_pn:prop_ck="-8509111891294559600" xil_pn:start_ts="1481222457">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
@@ -258,9 +258,11 @@
       <status xil_pn:value="WarningsGenerated"/>
       <status xil_pn:value="ReadyToRun"/>
       <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="InputAdded"/>
       <status xil_pn:value="InputChanged"/>
+      <status xil_pn:value="InputRemoved"/>
     </transform>
-    <transform xil_pn:end_ts="1481077157" xil_pn:in_ck="-331190687723696627" xil_pn:name="TRAN_postRouteTrce" xil_pn:prop_ck="445577401284416184" xil_pn:start_ts="1481077130">
+    <transform xil_pn:end_ts="1481222457" xil_pn:in_ck="-4342560282526773849" xil_pn:name="TRAN_postRouteTrce" xil_pn:prop_ck="445577401284416184" xil_pn:start_ts="1481222429">
       <status xil_pn:value="SuccessfullyRun"/>
       <status xil_pn:value="ReadyToRun"/>
       <outfile xil_pn:name="_xmsgs/trce.xmsgs"/>
