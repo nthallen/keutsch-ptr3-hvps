@@ -9,30 +9,30 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-USE ieee.std_logic_arith.ALL;
+USE ieee.numeric_std.ALL;
 LIBRARY PTR3_HVPS_lib;
 USE PTR3_HVPS_lib.ALL;
 
 ENTITY HVPS_tester IS
-   GENERIC( 
-      ADDR_WIDTH : integer range 16 DOWNTO 8 := 16
-   );
-   PORT( 
-      ExpAck  : IN     std_ulogic;
-      rData   : IN     std_logic_vector (15 DOWNTO 0);
-      ExpAddr : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
-      ExpRd   : OUT    std_ulogic;
-      ExpWr   : OUT    std_ulogic;
-      clk     : OUT    std_ulogic;
-      rst     : OUT    std_ulogic;
-      wData   : OUT    std_logic_vector (15 DOWNTO 0);
-      scl     : INOUT  std_logic;
-      sda     : INOUT  std_logic
-   );
+  GENERIC( 
+    ADDR_WIDTH : integer range 16 DOWNTO 8 := 16
+  );
+  PORT( 
+    ExpAck  : IN     std_logic;
+    rData   : IN     std_logic_vector (15 DOWNTO 0);
+    ExpAddr : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
+    ExpRd   : OUT    std_logic;
+    ExpWr   : OUT    std_logic;
+    clk     : OUT    std_logic;
+    rst     : OUT    std_logic;
+    wData   : OUT    std_logic_vector (15 DOWNTO 0);
+    scl     : INOUT  std_logic;
+    sda     : INOUT  std_logic
+  );
 
 -- Declarations
 
-END HVPS_tester ;
+END ENTITY HVPS_tester ;
 
 --
 ARCHITECTURE rtl OF HVPS_tester IS
@@ -496,27 +496,6 @@ BEGIN
       -- pragma synthesis_on
       return;
     end procedure sbrd;
-  
-    function int2slv(val : IN integer; len : IN integer)
-    return std_logic_vector is
-      Variable bit : integer range 0 to 16;
-      Variable rval : integer range 0 to 65535;
-      Variable slv : std_logic_vector(len-1 DOWNTO 0);
-    begin
-      bit := 0;
-      rval := val;
-      slv := (others => '0');
-      while bit < len loop
-        if rval mod 2 > 0 then
-          slv(bit) := '1';
-        else
-          slv(bit) := '0';
-        end if;
-        rval := rval / 2;
-        bit := bit + 1;
-      end loop;
-      return slv;
-    end function int2slv;
     
     Variable test_opt : integer := 1;
   BEGIN

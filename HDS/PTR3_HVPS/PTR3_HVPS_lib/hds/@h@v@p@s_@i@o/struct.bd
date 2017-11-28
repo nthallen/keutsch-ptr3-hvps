@@ -8,7 +8,11 @@ unitName "std_logic_1164"
 )
 (DmPackageRef
 library "ieee"
-unitName "std_logic_arith"
+unitName "numeric_std"
+)
+(DmPackageRef
+library "PTR3_HVPS_lib"
+unitName "HVPS_cfg"
 )
 ]
 instances [
@@ -20,7 +24,7 @@ elements [
 (GiElement
 name "N_CHANNELS"
 type "integer"
-value "14"
+value "N_CHANNELS"
 )
 (GiElement
 name "BASE_ADDR"
@@ -31,6 +35,11 @@ value "X\"0050\""
 name "ADDR_WIDTH"
 type "integer"
 value "ADDR_WIDTH"
+)
+(GiElement
+name "ChanCfgs"
+type "Cfg_t"
+value "ChanCfgs"
 )
 ]
 mwi 0
@@ -83,10 +92,11 @@ uid 243,0
 ]
 libraryRefs [
 "ieee"
+"PTR3_HVPS_lib"
 ]
 )
-version "30.1"
-appVersion "2013.1b (Build 2)"
+version "31.1"
+appVersion "2016.1 (Build 8)"
 noEmbeddedEditors 1
 model (BlockDiag
 VExpander (VariableExpander
@@ -133,7 +143,7 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\PTR3S\\PTR3_HVPS\\HDS\\PTR3_HVPS\\PT
 )
 (vvPair
 variable "date"
-value "11/29/2016"
+value "11/28/2017"
 )
 (vvPair
 variable "day"
@@ -145,7 +155,7 @@ value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "29"
+value "28"
 )
 (vvPair
 variable "entity_name"
@@ -173,15 +183,19 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/29/16"
+value "11/28/2017"
 )
 (vvPair
 variable "graphical_source_group"
-value "Domain Users"
+value "UNKNOWN"
+)
+(vvPair
+variable "graphical_source_host"
+value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "13:05:25"
+value "14:31:22"
 )
 (vvPair
 variable "group"
@@ -253,7 +267,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "C:\\modeltech64_10.3\\win64"
+value "C:\\modeltech64_10.6\\win64"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -285,7 +299,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "13:06:16"
+value "14:31:22"
 )
 (vvPair
 variable "unit"
@@ -297,7 +311,7 @@ value "nort"
 )
 (vvPair
 variable "version"
-value "2013.1b (Build 2)"
+value "2016.1 (Build 8)"
 )
 (vvPair
 variable "view"
@@ -305,11 +319,11 @@ value "struct"
 )
 (vvPair
 variable "year"
-value "2016"
+value "2017"
 )
 (vvPair
 variable "yy"
-value "16"
+value "17"
 )
 ]
 )
@@ -747,7 +761,7 @@ thePort (LogicalPort
 lang 11
 decl (Decl
 n "clk"
-t "std_ulogic"
+t "std_logic"
 o 4
 suid 3,0
 )
@@ -853,7 +867,7 @@ blo "46000,26300"
 thePort (LogicalPort
 decl (Decl
 n "ExpRd"
-t "std_ulogic"
+t "std_logic"
 o 2
 suid 6,0
 )
@@ -887,7 +901,7 @@ blo "46000,25300"
 thePort (LogicalPort
 decl (Decl
 n "ExpWr"
-t "std_ulogic"
+t "std_logic"
 o 3
 suid 7,0
 )
@@ -922,7 +936,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "ExpAck"
-t "std_ulogic"
+t "std_logic"
 o 7
 suid 8,0
 )
@@ -992,7 +1006,7 @@ thePort (LogicalPort
 lang 11
 decl (Decl
 n "rst"
-t "std_ulogic"
+t "std_logic"
 o 5
 suid 12,0
 )
@@ -1058,10 +1072,12 @@ va (VaSet
 isHidden 1
 font "Courier New,8,0"
 )
-xt "45000,19400,78000,21800"
-st "N_CHANNELS = 14            ( integer                       )  
+xt "45000,19400,78000,22600"
+st "N_CHANNELS = N_CHANNELS    ( integer                       )  
 BASE_ADDR  = X\"0050\"       ( std_logic_vector(15 DOWNTO 0) )  
-ADDR_WIDTH = ADDR_WIDTH    ( integer                       )  "
+ADDR_WIDTH = ADDR_WIDTH    ( integer                       )  
+ChanCfgs   = ChanCfgs      ( Cfg_t                         )  
+"
 )
 header ""
 )
@@ -1069,7 +1085,7 @@ elements [
 (GiElement
 name "N_CHANNELS"
 type "integer"
-value "14"
+value "N_CHANNELS"
 )
 (GiElement
 name "BASE_ADDR"
@@ -1080,6 +1096,11 @@ value "X\"0050\""
 name "ADDR_WIDTH"
 type "integer"
 value "ADDR_WIDTH"
+)
+(GiElement
+name "ChanCfgs"
+type "Cfg_t"
+value "ChanCfgs"
 )
 ]
 )
@@ -1551,7 +1572,7 @@ blo "29000,29300"
 thePort (LogicalPort
 decl (Decl
 n "BdIntr"
-t "std_ulogic_vector"
+t "std_logic_vector"
 b "(N_INTERRUPTS-1 downto 0)"
 o 13
 )
@@ -1586,7 +1607,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "Collision"
-t "std_ulogic"
+t "std_logic"
 o 14
 )
 )
@@ -1621,7 +1642,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "INTA"
-t "std_ulogic"
+t "std_logic"
 o 15
 )
 )
@@ -1656,7 +1677,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "CmdEnbl"
-t "std_ulogic"
+t "std_logic"
 o 16
 )
 )
@@ -1691,7 +1712,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "CmdStrb"
-t "std_ulogic"
+t "std_logic"
 o 17
 )
 )
@@ -1726,7 +1747,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "ExpReset"
-t "std_ulogic"
+t "std_logic"
 o 18
 )
 )
@@ -1759,7 +1780,7 @@ blo "19000,28300"
 thePort (LogicalPort
 decl (Decl
 n "Fail_In"
-t "std_ulogic"
+t "std_logic"
 o 19
 )
 )
@@ -1793,7 +1814,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "Fail_Out"
-t "std_ulogic"
+t "std_logic"
 o 20
 )
 )
@@ -1827,7 +1848,7 @@ thePort (LogicalPort
 m 1
 decl (Decl
 n "Flt_CPU_Reset"
-t "std_ulogic"
+t "std_logic"
 o 21
 )
 )
@@ -1963,8 +1984,8 @@ archFileType "UNKNOWN"
 uid 253,0
 decl (Decl
 n "ExpReset"
-t "std_ulogic"
-o 1
+t "std_logic"
+o 17
 suid 1,0
 )
 declText (MLText
@@ -1972,8 +1993,8 @@ uid 254,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,15800,41500,16600"
-st "SIGNAL ExpReset         : std_ulogic"
+xt "22000,15800,41000,16600"
+st "SIGNAL ExpReset         : std_logic"
 )
 )
 *52 (Net
@@ -1983,7 +2004,7 @@ decl (Decl
 n "rData"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 2
+o 20
 suid 2,0
 )
 declText (MLText
@@ -2000,7 +2021,7 @@ uid 265,0
 decl (Decl
 n "ExpWr"
 t "std_logic"
-o 3
+o 18
 suid 3,0
 )
 declText (MLText
@@ -2017,7 +2038,7 @@ uid 271,0
 decl (Decl
 n "ExpRd"
 t "std_logic"
-o 4
+o 16
 suid 4,0
 )
 declText (MLText
@@ -2035,7 +2056,7 @@ decl (Decl
 n "ExpAddr"
 t "std_logic_vector"
 b "(ADDR_WIDTH-1 DOWNTO 0)"
-o 5
+o 15
 suid 5,0
 )
 declText (MLText
@@ -2053,7 +2074,7 @@ decl (Decl
 n "WData"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 6
+o 19
 suid 6,0
 )
 declText (MLText
@@ -2154,8 +2175,8 @@ uid 319,0
 lang 11
 decl (Decl
 n "clk"
-t "std_ulogic"
-o 10
+t "std_logic"
+o 1
 suid 10,0
 )
 declText (MLText
@@ -2163,8 +2184,8 @@ uid 320,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,2000,38000,2800"
-st "clk              : std_ulogic"
+xt "22000,2000,37500,2800"
+st "clk              : std_logic"
 )
 )
 *60 (PortIoIn
@@ -2443,7 +2464,7 @@ decl (Decl
 n "subbus_ctrl"
 t "std_logic_vector"
 b "(6 DOWNTO 0)"
-o 11
+o 3
 suid 18,0
 )
 declText (MLText
@@ -2461,7 +2482,7 @@ decl (Decl
 n "subbus_addr"
 t "std_logic_vector"
 b "(ADDR_WIDTH-1 DOWNTO 0)"
-o 12
+o 2
 suid 19,0
 )
 declText (MLText
@@ -2479,7 +2500,7 @@ decl (Decl
 n "subbus_data_o"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 13
+o 4
 suid 20,0
 )
 declText (MLText
@@ -2497,7 +2518,7 @@ decl (Decl
 n "subbus_data_i"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 15
+o 8
 suid 21,0
 )
 declText (MLText
@@ -2515,7 +2536,7 @@ decl (Decl
 n "subbus_status"
 t "std_logic_vector"
 b "(3 DOWNTO 0)"
-o 14
+o 10
 suid 22,0
 )
 declText (MLText
@@ -2576,8 +2597,8 @@ tm "WireNameMgr"
 uid 433,0
 decl (Decl
 n "subbus_fail_out"
-t "std_ulogic"
-o 16
+t "std_logic"
+o 9
 suid 24,0
 )
 declText (MLText
@@ -2585,8 +2606,8 @@ uid 434,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,8400,38000,9200"
-st "subbus_fail_out  : std_ulogic"
+xt "22000,8400,37500,9200"
+st "subbus_fail_out  : std_logic"
 )
 )
 *73 (Net
@@ -2595,7 +2616,7 @@ lang 11
 decl (Decl
 n "hvps_scl"
 t "std_logic"
-o 7
+o 11
 suid 25,0
 )
 declText (MLText
@@ -2613,7 +2634,7 @@ lang 11
 decl (Decl
 n "hvps_sda"
 t "std_logic"
-o 8
+o 12
 suid 26,0
 )
 declText (MLText
@@ -2674,8 +2695,8 @@ tm "WireNameMgr"
 uid 483,0
 decl (Decl
 n "subbus_fail_in"
-t "std_ulogic"
-o 17
+t "std_logic"
+o 5
 suid 28,0
 )
 declText (MLText
@@ -2683,8 +2704,8 @@ uid 484,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,5200,38000,6000"
-st "subbus_fail_in   : std_ulogic"
+xt "22000,5200,37500,6000"
+st "subbus_fail_in   : std_logic"
 )
 )
 *77 (Net
@@ -2693,7 +2714,7 @@ decl (Decl
 n "BdIntr"
 t "std_ulogic_vector"
 b "(N_INTERRUPTS-1 downto 0)"
-o 18
+o 13
 suid 29,0
 )
 declText (MLText
@@ -2711,7 +2732,7 @@ decl (Decl
 n "ExpAck"
 t "std_logic_vector"
 b "(N_BOARDS-1 DOWNTO 0)"
-o 18
+o 14
 suid 30,0
 )
 declText (MLText
@@ -2727,8 +2748,8 @@ st "SIGNAL ExpAck           : std_logic_vector(N_BOARDS-1 DOWNTO 0)"
 uid 519,0
 decl (Decl
 n "Flt_CPU_Reset"
-t "std_ulogic"
-o 19
+t "std_logic"
+o 6
 suid 32,0
 )
 declText (MLText
@@ -2736,8 +2757,8 @@ uid 520,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,6000,38000,6800"
-st "Flt_CPU_Reset    : std_ulogic"
+xt "22000,6000,37500,6800"
+st "Flt_CPU_Reset    : std_logic"
 )
 )
 *80 (PortIoOut
@@ -2834,8 +2855,8 @@ tm "WireNameMgr"
 uid 543,0
 decl (Decl
 n "subbus_collision"
-t "std_ulogic"
-o 20
+t "std_logic"
+o 7
 suid 34,0
 )
 declText (MLText
@@ -2843,8 +2864,8 @@ uid 544,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "22000,6800,38000,7600"
-st "subbus_collision : std_ulogic"
+xt "22000,6800,37500,7600"
+st "subbus_collision : std_logic"
 )
 )
 *83 (Wire
@@ -3714,10 +3735,12 @@ blo "0,800"
 uid 43,0
 va (VaSet
 )
-xt "0,1000,10900,4000"
+xt "0,1000,13700,6000"
 st "LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;"
+USE ieee.numeric_std.all;
+LIBRARY PTR3_HVPS_lib;
+USE PTR3_HVPS_lib.HVPS_cfg.all;"
 tm "PackageList"
 )
 ]
@@ -3795,12 +3818,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "7,174,1281,972"
-viewArea "-1000,-1000,84772,51890"
+windowSize "1455,300,2730,1087"
+viewArea "-972,-972,87409,52546"
 cachedDiagramExtent "0,0,78000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 643,0
+lastUid 678,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4882,8 +4905,8 @@ port (LogicalPort
 m 4
 decl (Decl
 n "ExpReset"
-t "std_ulogic"
-o 1
+t "std_logic"
+o 17
 suid 1,0
 )
 )
@@ -4897,7 +4920,7 @@ decl (Decl
 n "rData"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 2
+o 20
 suid 2,0
 )
 )
@@ -4909,7 +4932,7 @@ m 4
 decl (Decl
 n "ExpWr"
 t "std_logic"
-o 3
+o 18
 suid 3,0
 )
 )
@@ -4921,7 +4944,7 @@ m 4
 decl (Decl
 n "ExpRd"
 t "std_logic"
-o 4
+o 16
 suid 4,0
 )
 )
@@ -4934,7 +4957,7 @@ decl (Decl
 n "ExpAddr"
 t "std_logic_vector"
 b "(ADDR_WIDTH-1 DOWNTO 0)"
-o 5
+o 15
 suid 5,0
 )
 )
@@ -4947,7 +4970,7 @@ decl (Decl
 n "WData"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 6
+o 19
 suid 6,0
 )
 )
@@ -4958,8 +4981,8 @@ port (LogicalPort
 lang 11
 decl (Decl
 n "clk"
-t "std_ulogic"
-o 10
+t "std_logic"
+o 1
 suid 10,0
 )
 )
@@ -4971,7 +4994,7 @@ decl (Decl
 n "subbus_ctrl"
 t "std_logic_vector"
 b "(6 DOWNTO 0)"
-o 11
+o 3
 suid 18,0
 )
 )
@@ -4983,7 +5006,7 @@ decl (Decl
 n "subbus_addr"
 t "std_logic_vector"
 b "(ADDR_WIDTH-1 DOWNTO 0)"
-o 12
+o 2
 suid 19,0
 )
 )
@@ -4995,7 +5018,7 @@ decl (Decl
 n "subbus_data_o"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 13
+o 4
 suid 20,0
 )
 )
@@ -5008,7 +5031,7 @@ decl (Decl
 n "subbus_data_i"
 t "std_logic_vector"
 b "(15 DOWNTO 0)"
-o 15
+o 8
 suid 21,0
 )
 )
@@ -5021,7 +5044,7 @@ decl (Decl
 n "subbus_status"
 t "std_logic_vector"
 b "(3 DOWNTO 0)"
-o 14
+o 10
 suid 22,0
 )
 )
@@ -5032,8 +5055,8 @@ port (LogicalPort
 m 1
 decl (Decl
 n "subbus_fail_out"
-t "std_ulogic"
-o 16
+t "std_logic"
+o 9
 suid 24,0
 )
 )
@@ -5046,7 +5069,7 @@ m 2
 decl (Decl
 n "hvps_scl"
 t "std_logic"
-o 7
+o 11
 suid 25,0
 )
 )
@@ -5059,7 +5082,7 @@ m 2
 decl (Decl
 n "hvps_sda"
 t "std_logic"
-o 8
+o 12
 suid 26,0
 )
 )
@@ -5069,8 +5092,8 @@ uid 469,0
 port (LogicalPort
 decl (Decl
 n "subbus_fail_in"
-t "std_ulogic"
-o 17
+t "std_logic"
+o 5
 suid 28,0
 )
 )
@@ -5083,7 +5106,7 @@ decl (Decl
 n "BdIntr"
 t "std_ulogic_vector"
 b "(N_INTERRUPTS-1 downto 0)"
-o 18
+o 13
 suid 29,0
 )
 )
@@ -5096,7 +5119,7 @@ decl (Decl
 n "ExpAck"
 t "std_logic_vector"
 b "(N_BOARDS-1 DOWNTO 0)"
-o 18
+o 14
 suid 30,0
 )
 )
@@ -5107,8 +5130,8 @@ port (LogicalPort
 m 1
 decl (Decl
 n "Flt_CPU_Reset"
-t "std_ulogic"
-o 19
+t "std_logic"
+o 6
 suid 32,0
 )
 )
@@ -5119,8 +5142,8 @@ port (LogicalPort
 m 1
 decl (Decl
 n "subbus_collision"
-t "std_ulogic"
-o 20
+t "std_logic"
+o 7
 suid 34,0
 )
 )
@@ -5178,37 +5201,37 @@ uid 72,0
 )
 *174 (MRCItem
 litem &149
-pos 7
+pos 12
 dimension 20
 uid 440,0
 )
 *175 (MRCItem
 litem &150
-pos 8
+pos 13
 dimension 20
 uid 442,0
 )
 *176 (MRCItem
 litem &151
-pos 9
+pos 14
 dimension 20
 uid 444,0
 )
 *177 (MRCItem
 litem &152
-pos 10
+pos 15
 dimension 20
 uid 446,0
 )
 *178 (MRCItem
 litem &153
-pos 11
+pos 16
 dimension 20
 uid 448,0
 )
 *179 (MRCItem
 litem &154
-pos 12
+pos 17
 dimension 20
 uid 450,0
 )
@@ -5238,19 +5261,19 @@ uid 460,0
 )
 *184 (MRCItem
 litem &159
-pos 15
+pos 7
 dimension 20
 uid 462,0
 )
 *185 (MRCItem
 litem &160
-pos 16
+pos 8
 dimension 20
 uid 464,0
 )
 *186 (MRCItem
 litem &161
-pos 17
+pos 9
 dimension 20
 uid 466,0
 )
@@ -5274,25 +5297,25 @@ uid 486,0
 )
 *190 (MRCItem
 litem &165
-pos 13
+pos 18
 dimension 20
 uid 496,0
 )
 *191 (MRCItem
 litem &166
-pos 14
+pos 19
 dimension 20
 uid 516,0
 )
 *192 (MRCItem
 litem &167
-pos 18
+pos 10
 dimension 20
 uid 546,0
 )
 *193 (MRCItem
 litem &168
-pos 19
+pos 11
 dimension 20
 uid 548,0
 )
@@ -5428,6 +5451,22 @@ value "8"
 )
 uid 611,0
 )
+*217 (LogGeneric
+generic (GiElement
+name "N_CHANNELS"
+type "integer"
+value "14"
+)
+uid 675,0
+)
+*218 (LogGeneric
+generic (GiElement
+name "ChanCfgs"
+type "Cfg_t"
+value "( \"000000000\", \"000000010\", \"001000100\", \"010000111\", \"011001000\", \"011001011\", \"100010001\", \"011011000\", \"011011011\", \"100100001\", \"011101000\", \"011101011\", \"100110001\", \"100111001\" )"
+)
+uid 677,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -5435,7 +5474,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 95,0
 optionalChildren [
-*217 (Sheet
+*219 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -5452,49 +5491,61 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *218 (MRCItem
+emptyMRCItem *220 (MRCItem
 litem &202
-pos 3
+pos 5
 dimension 20
 )
 uid 97,0
 optionalChildren [
-*219 (MRCItem
+*221 (MRCItem
 litem &203
 pos 0
 dimension 20
 uid 98,0
 )
-*220 (MRCItem
+*222 (MRCItem
 litem &204
 pos 1
 dimension 23
 uid 99,0
 )
-*221 (MRCItem
+*223 (MRCItem
 litem &205
 pos 2
 hidden 1
 dimension 20
 uid 100,0
 )
-*222 (MRCItem
+*224 (MRCItem
 litem &214
 pos 0
 dimension 20
 uid 498,0
 )
-*223 (MRCItem
+*225 (MRCItem
 litem &215
 pos 1
 dimension 20
 uid 518,0
 )
-*224 (MRCItem
+*226 (MRCItem
 litem &216
 pos 2
 dimension 20
 uid 612,0
+)
+*227 (MRCItem
+litem &217
+pos 3
+dimension 20
+uid 676,0
+)
+*228 (MRCItem
+litem &218
+pos 4
+dimension 20
+uid 678,0
 )
 ]
 )
@@ -5507,43 +5558,43 @@ textAngle 90
 )
 uid 101,0
 optionalChildren [
-*225 (MRCItem
+*229 (MRCItem
 litem &206
 pos 0
 dimension 20
 uid 102,0
 )
-*226 (MRCItem
+*230 (MRCItem
 litem &208
 pos 1
 dimension 50
 uid 103,0
 )
-*227 (MRCItem
+*231 (MRCItem
 litem &209
 pos 2
 dimension 100
 uid 104,0
 )
-*228 (MRCItem
+*232 (MRCItem
 litem &210
 pos 3
 dimension 100
 uid 105,0
 )
-*229 (MRCItem
+*233 (MRCItem
 litem &211
 pos 4
 dimension 50
 uid 106,0
 )
-*230 (MRCItem
+*234 (MRCItem
 litem &212
 pos 5
 dimension 50
 uid 107,0
 )
-*231 (MRCItem
+*235 (MRCItem
 litem &213
 pos 6
 dimension 80

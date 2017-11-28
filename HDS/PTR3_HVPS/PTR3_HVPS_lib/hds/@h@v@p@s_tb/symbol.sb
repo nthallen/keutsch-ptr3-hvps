@@ -2,10 +2,18 @@ DocumentHdrVersion "1.1"
 Header (DocumentHdr
 version 2
 dmPackageRefs [
+(DmPackageRef
+library "PTR3_HVPS_lib"
+unitName "HVPS_cfg"
+itemName "ALL"
+)
+]
+libraryRefs [
+"PTR3_HVPS_lib"
 ]
 )
-version "25.1"
-appVersion "2013.1b (Build 2)"
+version "26.1"
+appVersion "2016.1 (Build 8)"
 model (Symbol
 commonDM (CommonDM
 ldm (LogicalDM
@@ -73,7 +81,7 @@ font "Tahoma,10,0"
 )
 emptyMRCItem *15 (MRCItem
 litem &1
-pos 3
+pos 0
 dimension 20
 )
 uid 68,0
@@ -229,6 +237,14 @@ value "8"
 )
 uid 182,0
 )
+*42 (LogGeneric
+generic (GiElement
+name "ChanCfgs"
+type "Cfg_t"
+value "( \"000000000\", \"000000010\", \"001000100\", \"010000111\", \"011001000\", \"011001011\", \"100010001\", \"011011000\", \"011011011\", \"100100001\", \"011101000\", \"011101011\", \"100110001\", \"100111001\" )"
+)
+uid 230,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -236,7 +252,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 94,0
 optionalChildren [
-*42 (Sheet
+*43 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -253,49 +269,55 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *43 (MRCItem
+emptyMRCItem *44 (MRCItem
 litem &27
 pos 3
 dimension 20
 )
 uid 96,0
 optionalChildren [
-*44 (MRCItem
+*45 (MRCItem
 litem &28
 pos 0
 dimension 20
 uid 97,0
 )
-*45 (MRCItem
+*46 (MRCItem
 litem &29
 pos 1
 dimension 23
 uid 98,0
 )
-*46 (MRCItem
+*47 (MRCItem
 litem &30
 pos 2
 hidden 1
 dimension 20
 uid 99,0
 )
-*47 (MRCItem
+*48 (MRCItem
 litem &39
 pos 0
 dimension 20
 uid 108,0
 )
-*48 (MRCItem
+*49 (MRCItem
 litem &40
 pos 1
 dimension 20
 uid 156,0
 )
-*49 (MRCItem
+*50 (MRCItem
 litem &41
 pos 2
 dimension 20
 uid 181,0
+)
+*51 (MRCItem
+litem &42
+pos 3
+dimension 20
+uid 229,0
 )
 ]
 )
@@ -308,43 +330,43 @@ textAngle 90
 )
 uid 100,0
 optionalChildren [
-*50 (MRCItem
+*52 (MRCItem
 litem &31
 pos 0
 dimension 20
 uid 101,0
 )
-*51 (MRCItem
+*53 (MRCItem
 litem &33
 pos 1
 dimension 50
 uid 102,0
 )
-*52 (MRCItem
+*54 (MRCItem
 litem &34
 pos 2
 dimension 100
 uid 103,0
 )
-*53 (MRCItem
+*55 (MRCItem
 litem &35
 pos 3
 dimension 100
 uid 104,0
 )
-*54 (MRCItem
+*56 (MRCItem
 litem &36
 pos 4
 dimension 50
 uid 105,0
 )
-*55 (MRCItem
+*57 (MRCItem
 litem &37
 pos 5
 dimension 50
 uid 106,0
 )
-*56 (MRCItem
+*58 (MRCItem
 litem &38
 pos 6
 dimension 80
@@ -408,7 +430,7 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\PTR3S\\PTR3_HVPS\\HDS\\PTR3_HVPS\\PT
 )
 (vvPair
 variable "date"
-value "11/29/2016"
+value "11/28/2017"
 )
 (vvPair
 variable "day"
@@ -420,7 +442,7 @@ value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "29"
+value "28"
 )
 (vvPair
 variable "entity_name"
@@ -448,15 +470,19 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/29/16"
+value "11/28/2017"
 )
 (vvPair
 variable "graphical_source_group"
-value "Domain Users"
+value "UNKNOWN"
+)
+(vvPair
+variable "graphical_source_host"
+value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "13:12:30"
+value "14:39:30"
 )
 (vvPair
 variable "group"
@@ -528,7 +554,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "C:\\modeltech64_10.3\\win64"
+value "C:\\modeltech64_10.6\\win64"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -560,7 +586,7 @@ value "symbol"
 )
 (vvPair
 variable "time"
-value "13:12:30"
+value "14:39:30"
 )
 (vvPair
 variable "unit"
@@ -572,7 +598,7 @@ value "nort"
 )
 (vvPair
 variable "version"
-value "2013.1b (Build 2)"
+value "2016.1 (Build 8)"
 )
 (vvPair
 variable "view"
@@ -580,18 +606,18 @@ value "symbol"
 )
 (vvPair
 variable "year"
-value "2016"
+value "2017"
 )
 (vvPair
 variable "yy"
-value "16"
+value "17"
 )
 ]
 )
 LanguageMgr "VhdlLangMgr"
 uid 51,0
 optionalChildren [
-*57 (SymbolBody
+*59 (SymbolBody
 uid 8,0
 shape (Rectangle
 uid 9,0
@@ -626,7 +652,7 @@ st "HVPS_tb"
 blo "22200,16800"
 )
 )
-gi *58 (GenericInterface
+gi *60 (GenericInterface
 uid 13,0
 ps "CenterOffsetStrategy"
 matrix (Matrix
@@ -636,12 +662,13 @@ uid 15,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "0,12000,13000,16000"
+xt "0,12000,104500,16800"
 st "Generic Declarations
 
-N_CHANNELS integer 14  
-WORD_SIZE  integer 16  
-ADDR_WIDTH integer 8   
+N_CHANNELS integer 14                                                                                                                                                                                        
+WORD_SIZE  integer 16                                                                                                                                                                                        
+ADDR_WIDTH integer 8                                                                                                                                                                                         
+ChanCfgs   Cfg_t   ( \"000000000\", \"000000010\", \"001000100\", \"010000111\", \"011001000\", \"011001011\", \"100010001\", \"011011000\", \"011011011\", \"100100001\", \"011101000\", \"011101011\", \"100110001\", \"100111001\" )  
 "
 )
 header "Generic Declarations"
@@ -663,6 +690,11 @@ name "ADDR_WIDTH"
 type "integer"
 value "8"
 )
+(GiElement
+name "ChanCfgs"
+type "Cfg_t"
+value "( \"000000000\", \"000000010\", \"001000100\", \"010000111\", \"011001000\", \"011001011\", \"100010001\", \"011011000\", \"011011011\", \"100100001\", \"011101000\", \"011101011\", \"100110001\", \"100111001\" )"
+)
 ]
 )
 portInstanceVisAsIs 1
@@ -673,10 +705,10 @@ portVis (PortSigDisplay
 sIVOD 1
 )
 )
-*59 (Grouping
+*61 (Grouping
 uid 16,0
 optionalChildren [
-*60 (CommentText
+*62 (CommentText
 uid 18,0
 shape (Rectangle
 uid 19,0
@@ -707,7 +739,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*61 (CommentText
+*63 (CommentText
 uid 21,0
 shape (Rectangle
 uid 22,0
@@ -738,7 +770,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*62 (CommentText
+*64 (CommentText
 uid 24,0
 shape (Rectangle
 uid 25,0
@@ -769,7 +801,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*63 (CommentText
+*65 (CommentText
 uid 27,0
 shape (Rectangle
 uid 28,0
@@ -800,7 +832,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*64 (CommentText
+*66 (CommentText
 uid 30,0
 shape (Rectangle
 uid 31,0
@@ -830,7 +862,7 @@ visibleWidth 20000
 ignorePrefs 1
 titleBlock 1
 )
-*65 (CommentText
+*67 (CommentText
 uid 33,0
 shape (Rectangle
 uid 34,0
@@ -861,7 +893,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*66 (CommentText
+*68 (CommentText
 uid 36,0
 shape (Rectangle
 uid 37,0
@@ -892,7 +924,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*67 (CommentText
+*69 (CommentText
 uid 39,0
 shape (Rectangle
 uid 40,0
@@ -923,7 +955,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*68 (CommentText
+*70 (CommentText
 uid 42,0
 shape (Rectangle
 uid 43,0
@@ -954,7 +986,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*69 (CommentText
+*71 (CommentText
 uid 45,0
 shape (Rectangle
 uid 46,0
@@ -1010,11 +1042,11 @@ xShown 1
 yShown 1
 color "26368,26368,26368"
 )
-packageList *70 (PackageList
+packageList *72 (PackageList
 uid 48,0
 stg "VerticalLayoutStrategy"
 textVec [
-*71 (Text
+*73 (Text
 uid 49,0
 va (VaSet
 font "arial,8,1"
@@ -1023,18 +1055,21 @@ xt "0,0,5400,1000"
 st "Package List"
 blo "0,800"
 )
-*72 (MLText
+*74 (MLText
 uid 50,0
 va (VaSet
 )
-xt "0,1000,10900,4000"
+xt "0,1000,14200,3000"
+st "LIBRARY PTR3_HVPS_lib;
+USE PTR3_HVPS_lib.HVPS_cfg.ALL;"
 tm "PackageList"
 )
 ]
 )
-windowSize "0,0,1015,690"
-viewArea "0,0,0,0"
-cachedDiagramExtent "0,0,0,0"
+windowSize "192,153,1208,843"
+viewArea "-30290,-21973,35666,22974"
+cachedDiagramExtent "0,0,68000,51000"
+hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
 defaultCommentText (CommentText
 shape (Rectangle
@@ -1146,7 +1181,7 @@ st "<cell>"
 blo "22200,16800"
 )
 )
-gi *73 (GenericInterface
+gi *75 (GenericInterface
 ps "CenterOffsetStrategy"
 matrix (Matrix
 text (MLText
@@ -1243,7 +1278,7 @@ o 0
 )
 )
 )
-DeclarativeBlock *74 (SymDeclBlock
+DeclarativeBlock *76 (SymDeclBlock
 uid 1,0
 stg "SymDeclLayoutStrategy"
 declLabel (Text
@@ -1301,7 +1336,7 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 182,0
+lastUid 230,0
 okToSyncOnLoad 1
 OkToSyncGenericsOnLoad 1
 activeModelName "Symbol:CDM"

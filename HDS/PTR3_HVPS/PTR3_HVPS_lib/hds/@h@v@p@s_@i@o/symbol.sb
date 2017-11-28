@@ -8,15 +8,20 @@ unitName "std_logic_1164"
 )
 (DmPackageRef
 library "ieee"
-unitName "std_logic_arith"
+unitName "numeric_std"
+)
+(DmPackageRef
+library "PTR3_HVPS_lib"
+unitName "HVPS_cfg"
 )
 ]
 libraryRefs [
 "ieee"
+"PTR3_HVPS_lib"
 ]
 )
-version "25.1"
-appVersion "2013.1b (Build 2)"
+version "26.1"
+appVersion "2016.1 (Build 8)"
 model (Symbol
 commonDM (CommonDM
 ldm (LogicalDM
@@ -64,7 +69,7 @@ port (LogicalPort
 lang 11
 decl (Decl
 n "clk"
-t "std_ulogic"
+t "std_logic"
 o 1
 suid 1,0
 )
@@ -138,7 +143,7 @@ port (LogicalPort
 m 1
 decl (Decl
 n "subbus_fail_out"
-t "std_ulogic"
+t "std_logic"
 o 9
 suid 7,0
 )
@@ -175,7 +180,7 @@ uid 125,0
 port (LogicalPort
 decl (Decl
 n "subbus_fail_in"
-t "std_ulogic"
+t "std_logic"
 o 5
 suid 10,0
 )
@@ -187,7 +192,7 @@ port (LogicalPort
 m 1
 decl (Decl
 n "Flt_CPU_Reset"
-t "std_ulogic"
+t "std_logic"
 o 6
 suid 11,0
 )
@@ -199,7 +204,7 @@ port (LogicalPort
 m 1
 decl (Decl
 n "subbus_collision"
-t "std_ulogic"
+t "std_logic"
 o 7
 suid 12,0
 )
@@ -232,7 +237,7 @@ font "Tahoma,10,0"
 )
 emptyMRCItem *27 (MRCItem
 litem &1
-pos 3
+pos 12
 dimension 20
 )
 uid 68,0
@@ -460,6 +465,22 @@ value "8"
 )
 uid 381,0
 )
+*66 (LogGeneric
+generic (GiElement
+name "N_CHANNELS"
+type "integer"
+value "14"
+)
+uid 429,0
+)
+*67 (LogGeneric
+generic (GiElement
+name "ChanCfgs"
+type "Cfg_t"
+value "( \"000000000\", \"000000010\", \"001000100\", \"010000111\", \"011001000\", \"011001011\", \"100010001\", \"011011000\", \"011011011\", \"100100001\", \"011101000\", \"011101011\", \"100110001\", \"100111001\" )"
+)
+uid 431,0
+)
 ]
 )
 pdm (PhysicalDM
@@ -467,7 +488,7 @@ displayShortBounds 1
 editShortBounds 1
 uid 94,0
 optionalChildren [
-*66 (Sheet
+*68 (Sheet
 sheetRow (SheetRow
 headerVa (MVa
 cellColor "49152,49152,49152"
@@ -484,49 +505,61 @@ cellColor "39936,56832,65280"
 fontColor "0,0,0"
 font "Tahoma,10,0"
 )
-emptyMRCItem *67 (MRCItem
+emptyMRCItem *69 (MRCItem
 litem &51
-pos 3
+pos 5
 dimension 20
 )
 uid 96,0
 optionalChildren [
-*68 (MRCItem
+*70 (MRCItem
 litem &52
 pos 0
 dimension 20
 uid 97,0
 )
-*69 (MRCItem
+*71 (MRCItem
 litem &53
 pos 1
 dimension 23
 uid 98,0
 )
-*70 (MRCItem
+*72 (MRCItem
 litem &54
 pos 2
 hidden 1
 dimension 20
 uid 99,0
 )
-*71 (MRCItem
+*73 (MRCItem
 litem &63
 pos 0
 dimension 20
 uid 224,0
 )
-*72 (MRCItem
+*74 (MRCItem
 litem &64
 pos 1
 dimension 20
 uid 272,0
 )
-*73 (MRCItem
+*75 (MRCItem
 litem &65
 pos 2
 dimension 20
 uid 380,0
+)
+*76 (MRCItem
+litem &66
+pos 3
+dimension 20
+uid 428,0
+)
+*77 (MRCItem
+litem &67
+pos 4
+dimension 20
+uid 430,0
 )
 ]
 )
@@ -539,43 +572,43 @@ textAngle 90
 )
 uid 100,0
 optionalChildren [
-*74 (MRCItem
+*78 (MRCItem
 litem &55
 pos 0
 dimension 20
 uid 101,0
 )
-*75 (MRCItem
+*79 (MRCItem
 litem &57
 pos 1
 dimension 50
 uid 102,0
 )
-*76 (MRCItem
+*80 (MRCItem
 litem &58
 pos 2
 dimension 100
 uid 103,0
 )
-*77 (MRCItem
+*81 (MRCItem
 litem &59
 pos 3
 dimension 100
 uid 104,0
 )
-*78 (MRCItem
+*82 (MRCItem
 litem &60
 pos 4
 dimension 50
 uid 105,0
 )
-*79 (MRCItem
+*83 (MRCItem
 litem &61
 pos 5
 dimension 50
 uid 106,0
 )
-*80 (MRCItem
+*84 (MRCItem
 litem &62
 pos 6
 dimension 80
@@ -639,7 +672,7 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\PTR3S\\PTR3_HVPS\\HDS\\PTR3_HVPS\\PT
 )
 (vvPair
 variable "date"
-value "11/29/2016"
+value "11/28/2017"
 )
 (vvPair
 variable "day"
@@ -651,7 +684,7 @@ value "Tuesday"
 )
 (vvPair
 variable "dd"
-value "29"
+value "28"
 )
 (vvPair
 variable "entity_name"
@@ -679,15 +712,19 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/29/16"
+value "11/28/2017"
 )
 (vvPair
 variable "graphical_source_group"
-value "Domain Users"
+value "UNKNOWN"
+)
+(vvPair
+variable "graphical_source_host"
+value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "13:06:16"
+value "14:00:30"
 )
 (vvPair
 variable "group"
@@ -759,7 +796,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "C:\\modeltech64_10.3\\win64"
+value "C:\\modeltech64_10.6\\win64"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -791,7 +828,7 @@ value "symbol"
 )
 (vvPair
 variable "time"
-value "13:06:16"
+value "14:00:30"
 )
 (vvPair
 variable "unit"
@@ -803,7 +840,7 @@ value "nort"
 )
 (vvPair
 variable "version"
-value "2013.1b (Build 2)"
+value "2016.1 (Build 8)"
 )
 (vvPair
 variable "view"
@@ -811,21 +848,21 @@ value "symbol"
 )
 (vvPair
 variable "year"
-value "2016"
+value "2017"
 )
 (vvPair
 variable "yy"
-value "16"
+value "17"
 )
 ]
 )
 LanguageMgr "VhdlLangMgr"
 uid 51,0
 optionalChildren [
-*81 (SymbolBody
+*85 (SymbolBody
 uid 8,0
 optionalChildren [
-*82 (CptPort
+*86 (CptPort
 uid 126,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -856,20 +893,20 @@ uid 130,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "44000,2000,65000,2800"
-st "clk              : IN     std_ulogic  ;"
+xt "44000,2000,64500,2800"
+st "clk              : IN     std_logic  ;"
 )
 thePort (LogicalPort
 lang 11
 decl (Decl
 n "clk"
-t "std_ulogic"
+t "std_logic"
 o 1
 suid 1,0
 )
 )
 )
-*83 (CptPort
+*87 (CptPort
 uid 131,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -913,7 +950,7 @@ suid 2,0
 )
 )
 )
-*84 (CptPort
+*88 (CptPort
 uid 136,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -957,7 +994,7 @@ suid 3,0
 )
 )
 )
-*85 (CptPort
+*89 (CptPort
 uid 141,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1001,7 +1038,7 @@ suid 4,0
 )
 )
 )
-*86 (CptPort
+*90 (CptPort
 uid 146,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1047,7 +1084,7 @@ suid 5,0
 )
 )
 )
-*87 (CptPort
+*91 (CptPort
 uid 151,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1093,7 +1130,7 @@ suid 6,0
 )
 )
 )
-*88 (CptPort
+*92 (CptPort
 uid 156,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1125,20 +1162,20 @@ uid 160,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "44000,8400,65000,9200"
-st "subbus_fail_out  : OUT    std_ulogic  ;"
+xt "44000,8400,64500,9200"
+st "subbus_fail_out  : OUT    std_logic  ;"
 )
 thePort (LogicalPort
 m 1
 decl (Decl
 n "subbus_fail_out"
-t "std_ulogic"
+t "std_logic"
 o 9
 suid 7,0
 )
 )
 )
-*89 (CptPort
+*93 (CptPort
 uid 161,0
 ps "OnEdgeStrategy"
 shape (Diamond
@@ -1184,7 +1221,7 @@ suid 8,0
 )
 )
 )
-*90 (CptPort
+*94 (CptPort
 uid 166,0
 ps "OnEdgeStrategy"
 shape (Diamond
@@ -1230,7 +1267,7 @@ suid 9,0
 )
 )
 )
-*91 (CptPort
+*95 (CptPort
 uid 196,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1261,19 +1298,19 @@ uid 200,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "44000,5200,65000,6000"
-st "subbus_fail_in   : IN     std_ulogic  ;"
+xt "44000,5200,64500,6000"
+st "subbus_fail_in   : IN     std_logic  ;"
 )
 thePort (LogicalPort
 decl (Decl
 n "subbus_fail_in"
-t "std_ulogic"
+t "std_logic"
 o 5
 suid 10,0
 )
 )
 )
-*92 (CptPort
+*96 (CptPort
 uid 301,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1305,20 +1342,20 @@ uid 305,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "44000,6000,65000,6800"
-st "Flt_CPU_Reset    : OUT    std_ulogic  ;"
+xt "44000,6000,64500,6800"
+st "Flt_CPU_Reset    : OUT    std_logic  ;"
 )
 thePort (LogicalPort
 m 1
 decl (Decl
 n "Flt_CPU_Reset"
-t "std_ulogic"
+t "std_logic"
 o 6
 suid 11,0
 )
 )
 )
-*93 (CptPort
+*97 (CptPort
 uid 306,0
 ps "OnEdgeStrategy"
 shape (Triangle
@@ -1350,14 +1387,14 @@ uid 310,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "44000,6800,65000,7600"
-st "subbus_collision : OUT    std_ulogic  ;"
+xt "44000,6800,64500,7600"
+st "subbus_collision : OUT    std_logic  ;"
 )
 thePort (LogicalPort
 m 1
 decl (Decl
 n "subbus_collision"
-t "std_ulogic"
+t "std_logic"
 o 7
 suid 12,0
 )
@@ -1398,7 +1435,7 @@ st "HVPS_IO"
 blo "22200,16800"
 )
 )
-gi *94 (GenericInterface
+gi *98 (GenericInterface
 uid 13,0
 ps "CenterOffsetStrategy"
 matrix (Matrix
@@ -1408,12 +1445,15 @@ uid 15,0
 va (VaSet
 font "Courier New,8,0"
 )
-xt "0,12000,23000,16000"
+xt "0,12000,114500,17600"
 st "Generic Declarations
 
-N_INTERRUPTS integer range 15 downto 0 0  
-N_BOARDS     integer range 15 downto 0 1  
-ADDR_WIDTH   integer                   8  "
+N_INTERRUPTS integer range 15 downto 0 0                                                                                                                                                                                         
+N_BOARDS     integer range 15 downto 0 1                                                                                                                                                                                         
+ADDR_WIDTH   integer                   8                                                                                                                                                                                         
+N_CHANNELS   integer                   14                                                                                                                                                                                        
+ChanCfgs     Cfg_t                     ( \"000000000\", \"000000010\", \"001000100\", \"010000111\", \"011001000\", \"011001011\", \"100010001\", \"011011000\", \"011011011\", \"100100001\", \"011101000\", \"011101011\", \"100110001\", \"100111001\" )  
+"
 )
 header "Generic Declarations"
 showHdrWhenContentsEmpty 1
@@ -1434,6 +1474,16 @@ name "ADDR_WIDTH"
 type "integer"
 value "8"
 )
+(GiElement
+name "N_CHANNELS"
+type "integer"
+value "14"
+)
+(GiElement
+name "ChanCfgs"
+type "Cfg_t"
+value "( \"000000000\", \"000000010\", \"001000100\", \"010000111\", \"011001000\", \"011001011\", \"100010001\", \"011011000\", \"011011011\", \"100100001\", \"011101000\", \"011101011\", \"100110001\", \"100111001\" )"
+)
 ]
 )
 portInstanceVisAsIs 1
@@ -1444,10 +1494,10 @@ portVis (PortSigDisplay
 sIVOD 1
 )
 )
-*95 (Grouping
+*99 (Grouping
 uid 16,0
 optionalChildren [
-*96 (CommentText
+*100 (CommentText
 uid 18,0
 shape (Rectangle
 uid 19,0
@@ -1478,7 +1528,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*97 (CommentText
+*101 (CommentText
 uid 21,0
 shape (Rectangle
 uid 22,0
@@ -1509,7 +1559,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*98 (CommentText
+*102 (CommentText
 uid 24,0
 shape (Rectangle
 uid 25,0
@@ -1540,7 +1590,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*99 (CommentText
+*103 (CommentText
 uid 27,0
 shape (Rectangle
 uid 28,0
@@ -1571,7 +1621,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*100 (CommentText
+*104 (CommentText
 uid 30,0
 shape (Rectangle
 uid 31,0
@@ -1601,7 +1651,7 @@ visibleWidth 20000
 ignorePrefs 1
 titleBlock 1
 )
-*101 (CommentText
+*105 (CommentText
 uid 33,0
 shape (Rectangle
 uid 34,0
@@ -1632,7 +1682,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*102 (CommentText
+*106 (CommentText
 uid 36,0
 shape (Rectangle
 uid 37,0
@@ -1663,7 +1713,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*103 (CommentText
+*107 (CommentText
 uid 39,0
 shape (Rectangle
 uid 40,0
@@ -1694,7 +1744,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*104 (CommentText
+*108 (CommentText
 uid 42,0
 shape (Rectangle
 uid 43,0
@@ -1725,7 +1775,7 @@ position 1
 ignorePrefs 1
 titleBlock 1
 )
-*105 (CommentText
+*109 (CommentText
 uid 45,0
 shape (Rectangle
 uid 46,0
@@ -1781,11 +1831,11 @@ xShown 1
 yShown 1
 color "26368,26368,26368"
 )
-packageList *106 (PackageList
+packageList *110 (PackageList
 uid 48,0
 stg "VerticalLayoutStrategy"
 textVec [
-*107 (Text
+*111 (Text
 uid 49,0
 va (VaSet
 font "arial,8,1"
@@ -1794,21 +1844,24 @@ xt "0,0,5400,1000"
 st "Package List"
 blo "0,800"
 )
-*108 (MLText
+*112 (MLText
 uid 50,0
 va (VaSet
 )
-xt "0,1000,10900,4000"
+xt "0,1000,13700,6000"
 st "LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;"
+USE ieee.numeric_std.all;
+LIBRARY PTR3_HVPS_lib;
+USE PTR3_HVPS_lib.HVPS_cfg.all;"
 tm "PackageList"
 )
 ]
 )
-windowSize "0,0,1015,690"
-viewArea "0,0,0,0"
-cachedDiagramExtent "0,0,0,0"
+windowSize "64,51,1081,741"
+viewArea "-30468,-22000,35808,23108"
+cachedDiagramExtent "0,0,114500,51000"
+hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
 defaultCommentText (CommentText
 shape (Rectangle
@@ -1920,7 +1973,7 @@ st "<cell>"
 blo "22200,16800"
 )
 )
-gi *109 (GenericInterface
+gi *113 (GenericInterface
 ps "CenterOffsetStrategy"
 matrix (Matrix
 text (MLText
@@ -2017,7 +2070,7 @@ o 0
 )
 )
 )
-DeclarativeBlock *110 (SymDeclBlock
+DeclarativeBlock *114 (SymDeclBlock
 uid 1,0
 stg "SymDeclLayoutStrategy"
 declLabel (Text
@@ -2075,6 +2128,8 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 404,0
-activeModelName "Symbol:CDM"
+lastUid 569,0
+okToSyncOnLoad 1
+OkToSyncGenericsOnLoad 1
+activeModelName "Symbol"
 )

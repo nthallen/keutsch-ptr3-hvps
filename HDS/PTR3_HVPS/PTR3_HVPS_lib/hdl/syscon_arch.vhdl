@@ -9,8 +9,7 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.all;
 
 ENTITY syscon IS
   GENERIC(
@@ -35,15 +34,15 @@ ENTITY syscon IS
     RData : IN std_logic_vector (16*N_BOARDS-1 DOWNTO 0);
     ExpAddr : OUT std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
     ExpAck : IN std_logic_vector (N_BOARDS-1 DOWNTO 0);
-    BdIntr : IN std_ulogic_vector(N_INTERRUPTS-1 downto 0);
-    Collision : OUT std_ulogic;
-    INTA    : OUT std_ulogic;
-    CmdEnbl : OUT std_ulogic;
-    CmdStrb : OUT std_ulogic;
-    ExpReset : OUT std_ulogic;
-    Fail_In : IN std_ulogic;
-    Fail_Out : OUT std_ulogic;
-    Flt_CPU_Reset : OUT std_ulogic -- 1sec reset pulse
+    BdIntr : IN std_logic_vector(N_INTERRUPTS-1 downto 0);
+    Collision : OUT std_logic;
+    INTA    : OUT std_logic;
+    CmdEnbl : OUT std_logic;
+    CmdStrb : OUT std_logic;
+    ExpReset : OUT std_logic;
+    Fail_In : IN std_logic;
+    Fail_Out : OUT std_logic;
+    Flt_CPU_Reset : OUT std_logic -- 1sec reset pulse
   );
 END ENTITY syscon;
 
@@ -52,32 +51,32 @@ ARCHITECTURE arch OF syscon IS
   SIGNAL DataIn : std_logic_vector (15 DOWNTO 0);
   SIGNAL Addr_int : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL Ctrl_int : std_logic_vector (6 DOWNTO 0); -- Arm_in, Tick, Rst, CE,CS,Wr,Rd
-  SIGNAL Cnt : std_logic_vector (3 DOWNTO 0);
-  SIGNAL INTA_int : std_ulogic;
-  SIGNAL Done_int : std_ulogic;
-  SIGNAL Ack_int : std_ulogic;
-  SIGNAL Start : std_ulogic;
-  SIGNAL BldNoEn : std_ulogic;
-  SIGNAL TwoMinuteTO : std_ulogic;
+  SIGNAL Cnt : unsigned(3 DOWNTO 0);
+  SIGNAL INTA_int : std_logic;
+  SIGNAL Done_int : std_logic;
+  SIGNAL Ack_int : std_logic;
+  SIGNAL Start : std_logic;
+  SIGNAL BldNoEn : std_logic;
+  SIGNAL TwoMinuteTO : std_logic;
   TYPE STATE_TYPE IS ( sc0, sc1i, sc1r, sclbn, sc1w, sc2 );
   SIGNAL current_state : STATE_TYPE;
   TYPE DSTATE_TYPE IS ( d0, d1, d2, d3 );
   SIGNAL dcnt_state : DSTATE_TYPE;
-  SIGNAL Collision_int : std_ulogic;
+  SIGNAL Collision_int : std_logic;
 
   COMPONENT syscon_tick
      GENERIC (
         DEBUG_MULTIPLIER : integer := 1
      );
      PORT (
-        TickTock    : IN     std_ulogic;
-        CmdEnbl_cmd : IN     std_ulogic;
-        Arm_in      : IN     std_ulogic;
-        CmdEnbl     : OUT    std_ulogic;
-        TwoSecondTO : OUT    std_ulogic;
-        Flt_CPU_Reset : OUT std_ulogic; -- 1sec reset pulse
-        TwoMinuteTO : OUT    std_ulogic;
-        F8M         : IN     std_ulogic
+        TickTock    : IN     std_logic;
+        CmdEnbl_cmd : IN     std_logic;
+        Arm_in      : IN     std_logic;
+        CmdEnbl     : OUT    std_logic;
+        TwoSecondTO : OUT    std_logic;
+        Flt_CPU_Reset : OUT std_logic; -- 1sec reset pulse
+        TwoMinuteTO : OUT    std_logic;
+        F8M         : IN     std_logic
      );
   END COMPONENT;
 
@@ -120,7 +119,7 @@ BEGIN
   end process;
   
   intr : process (F8M) is
-    Variable intr_int: std_ulogic;
+    Variable intr_int: std_logic;
   begin
     if F8M'Event and F8M = '1' then
       intr_int := '0';
@@ -137,9 +136,9 @@ BEGIN
   -- should be qualified downstream.
   -- Make the collision check synchronous to avoid latch
   ackr : process (F8M) is
-    Variable ack_i: std_ulogic;
+    Variable ack_i: std_logic;
     Variable n_ack: integer range N_BOARDS DOWNTO 0;
-    Variable coll: std_ulogic;
+    Variable coll: std_logic;
   begin
     if F8M'Event AND F8M = '1' then
       if rst = '1' then
@@ -235,7 +234,7 @@ BEGIN
             else
               Ack <= ack_int;
               DataIn(15 downto N_INTERRUPTS) <= ( others => '0' );
-              DataIn(N_INTERRUPTS-1 downto 0) <= To_StdLogicVector(BdIntr);
+              DataIn(N_INTERRUPTS-1 downto 0) <= BdIntr;
             end if;
           WHEN sc1r =>
             if Done_int = '1' then
