@@ -241,7 +241,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "14:32:02"
+value "15:13:51"
 )
 (vvPair
 variable "group"
@@ -345,7 +345,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "14:32:02"
+value "15:13:51"
 )
 (vvPair
 variable "unit"
@@ -1069,7 +1069,8 @@ xt "59700,56500,90700,59700"
 st "ADDR_WIDTH = ADDR_WIDTH    ( integer range 16 downto 8 )  
 WORD_SIZE  = 16            ( integer                   )  
 N_CHANNELS = N_CHANNELS    ( integer                   )  
-ChanCfgs   = ChanCfgs      ( Cfg_t                     )  "
+ChanCfgs   = ChanCfgs      ( Cfg_t                     )  
+"
 )
 header ""
 )
@@ -6272,7 +6273,7 @@ exportStdPackageRefs 1
 )
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 4581,0
+lastUid 4692,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

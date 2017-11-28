@@ -15,9 +15,10 @@ PACKAGE HVPS_cfg IS
   -- 8:6 => Voltage range
   --   000 => 200
   --   001 => 400
-  --   010 => -800
+  --   010 => (-)800
   --   011 => 2000
   --   100 => 3000
+  --   101 => (-)1000
   -- 5:3 => board address
   -- 2:1 => Next 2 bits are channel address on the board
   -- 0 => LSB indicates channel is the last one on the board

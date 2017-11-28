@@ -207,7 +207,7 @@ BEGIN
               INTA_int <= '1';
               Start <= '1';
             elsif RdEn = '1' AND WrEn = '0' AND
-                 Addr_int(ADDR_WIDTH-1 DOWNTO 1) = BDID_ADDR(ADDR_WIDTH-1 DOWNTO 0) then
+                 Addr_int(ADDR_WIDTH-1 DOWNTO 1) = BDID_ADDR(ADDR_WIDTH-1 DOWNTO 1) then
               current_state <= sclbn;
               Start <= '1';
               BldNoEn <= '1';

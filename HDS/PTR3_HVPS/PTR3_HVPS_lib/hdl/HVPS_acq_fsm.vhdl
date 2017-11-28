@@ -24,7 +24,8 @@ ENTITY HVPS_acq IS
     ADDR_WIDTH : integer range 16 downto 8 := 16;
     WORD_SIZE  : integer                   := 16;
     N_CHANNELS : integer                   := 14;
-    ChanCfgs   : Cfg_t                     := ( "000000000", "000000010", "001000100", "010000111",
+    ChanCfgs   : Cfg_t                     := (
+          "000000000", "000000010", "001000100", "010000111",
           "011001000", "011001011",
           "100010001",
           "011011000", "011011011",
@@ -290,6 +291,10 @@ BEGIN
       return  cfg(0);
     END FUNCTION mux_clr_bit;
     
+    -- hi_threshold() and lo_threshold() values are chosen to be somewhat
+    -- greater than and less than 15V, respectively, in order to provide
+    -- some hysteresis. The light will go on when the voltage is above
+    -- the hi_threshold() and go off when it goes below the lo_threshold().
     FUNCTION hi_threshold(cfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0))
         return std_logic_vector IS
       Variable thresh : std_logic_vector(15 DOWNTO 0);
@@ -300,6 +305,7 @@ BEGIN
         WHEN "010" => thresh := X"0535"; -- (-)800 Volts
         WHEN "011" => thresh := X"0215"; -- 2000 Volts
         WHEN "100" => thresh := X"0163"; -- 3000 Volts
+        WHEN "101" => thresh := X"0418"; -- (-)1000 Volts
         WHEN OTHERS => thresh := X"0000";
       END CASE;
       return thresh;
@@ -315,6 +321,7 @@ BEGIN
         WHEN "010" => thresh := X"048E"; -- (-)800 Volts
         WHEN "011" => thresh := X"01D2"; -- 2000 Volts
         WHEN "100" => thresh := X"0137"; -- 3000 Volts
+        WHEN "101" => thresh := X"0395"; -- (-)1000 Volts
         WHEN OTHERS => thresh := X"0000";
       END CASE;
       return thresh;
