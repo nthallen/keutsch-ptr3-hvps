@@ -9,8 +9,9 @@
 --
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
 USE ieee.numeric_std.all;
+Library UNISIM;
+use UNISIM.vcomponents.all;
 
 ENTITY temp_i2c IS
   PORT( 
@@ -31,26 +32,19 @@ END ENTITY temp_i2c ;
 --
 ARCHITECTURE beh OF temp_i2c IS
 BEGIN
-    
-  sda_proc : Process (sda_padoen_o, sda_pad_o) IS
-  Begin
-    if sda_padoen_o = '0' then
-      sda <= sda_pad_o;
-    else
-      sda <= 'Z';
-    end if;
-  End Process;
-  sda_pad_i <= sda;
-
-  scl_proc : Process (scl_padoen_o, scl_pad_o) IS
-  Begin
-    if scl_padoen_o = '0' then
-      scl <= scl_pad_o;
-    else
-      scl <= 'Z';
-    end if;
-  End Process;
-  scl_pad_i <= scl;
-
+  IOBUF_sda : IOBUF
+    port map (
+      O => sda_pad_i, -- Buffer output
+      IO => sda, -- Buffer inout port (connect directly to top-level port)
+      I => sda_pad_o, -- Buffer input
+      T => sda_padoen_o -- 3-state enable input, high=input, low=output
+    );
+  IOBUF_scl : IOBUF
+    port map (
+      O => scl_pad_i, -- Buffer output
+      IO => scl, -- Buffer inout port (connect directly to top-level port)
+      I => scl_pad_o, -- Buffer input
+      T => scl_padoen_o -- 3-state enable input, high=input, low=output
+    );
 END ARCHITECTURE beh;
 
