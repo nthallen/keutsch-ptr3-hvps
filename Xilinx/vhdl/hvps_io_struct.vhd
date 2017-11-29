@@ -167,12 +167,12 @@ BEGIN
     );
   U_1 : syscon
     GENERIC MAP (
-      DACS_BUILD_NUMBER => X"0044",
-      INSTRUMENT_ID     => X"0008",
+      DACS_BUILD_NUMBER => X"0002",
+      INSTRUMENT_ID     => X"0007",
       N_INTERRUPTS      => N_INTERRUPTS,
       N_BOARDS          => N_BOARDS,
       ADDR_WIDTH        => ADDR_WIDTH,
-      INTA_ADDR         => X"0004",
+      INTA_ADDR         => X"0001",
       BDID_ADDR         => X"0002"
     )
     PORT MAP (

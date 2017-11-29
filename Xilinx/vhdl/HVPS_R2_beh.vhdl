@@ -24,6 +24,7 @@ ENTITY HVPS_R2 IS
       subbus_addr      : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
       subbus_ctrl      : IN     std_logic_vector(6 DOWNTO 0);
       subbus_data_o    : IN     std_logic_vector(15 DOWNTO 0);
+      subbus_fail_in   : IN     std_logic;
       Flt_CPU_Reset    : OUT    std_logic;
       subbus_collision : OUT    std_logic;
       subbus_data_i    : OUT    std_logic_vector(15 DOWNTO 0);
@@ -85,7 +86,7 @@ BEGIN
       subbus_addr      => subbus_addr,
       subbus_ctrl      => subbus_ctrl,
       subbus_data_o    => subbus_data_o,
-      subbus_fail_in   => '0',
+      subbus_fail_in   => subbus_fail_in,
       Flt_CPU_Reset    => Flt_CPU_Reset,
       subbus_collision => subbus_collision,
       subbus_data_i    => subbus_data_i,

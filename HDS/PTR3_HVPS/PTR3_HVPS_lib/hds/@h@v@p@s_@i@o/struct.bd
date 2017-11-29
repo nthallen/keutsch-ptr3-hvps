@@ -53,12 +53,12 @@ elements [
 (GiElement
 name "DACS_BUILD_NUMBER"
 type "std_logic_vector(15 DOWNTO 0)"
-value "X\"0044\""
+value "X\"0002\""
 )
 (GiElement
 name "INSTRUMENT_ID"
 type "std_logic_vector(15 DOWNTO 0)"
-value "X\"0008\""
+value "X\"0007\""
 )
 (GiElement
 name "N_INTERRUPTS"
@@ -78,7 +78,7 @@ value "ADDR_WIDTH"
 (GiElement
 name "INTA_ADDR"
 type "std_logic_vector(15 DOWNTO 0)"
-value "X\"0004\""
+value "X\"0001\""
 )
 (GiElement
 name "BDID_ADDR"
@@ -143,19 +143,19 @@ value "C:\\Users\\nort.ARP\\Documents\\Exp\\PTR3S\\PTR3_HVPS\\HDS\\PTR3_HVPS\\PT
 )
 (vvPair
 variable "date"
-value "11/28/2017"
+value "11/29/2017"
 )
 (vvPair
 variable "day"
-value "Tue"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Tuesday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "28"
+value "29"
 )
 (vvPair
 variable "entity_name"
@@ -183,7 +183,7 @@ value "nort"
 )
 (vvPair
 variable "graphical_source_date"
-value "11/28/2017"
+value "11/29/2017"
 )
 (vvPair
 variable "graphical_source_group"
@@ -195,7 +195,7 @@ value "NORT-XPS14"
 )
 (vvPair
 variable "graphical_source_time"
-value "14:31:22"
+value "16:30:27"
 )
 (vvPair
 variable "group"
@@ -299,7 +299,7 @@ value "struct"
 )
 (vvPair
 variable "time"
-value "14:31:22"
+value "16:30:27"
 )
 (vvPair
 variable "unit"
@@ -1076,8 +1076,7 @@ xt "45000,19400,78000,22600"
 st "N_CHANNELS = N_CHANNELS    ( integer                       )  
 BASE_ADDR  = X\"0050\"       ( std_logic_vector(15 DOWNTO 0) )  
 ADDR_WIDTH = ADDR_WIDTH    ( integer                       )  
-ChanCfgs   = ChanCfgs      ( Cfg_t                         )  
-"
+ChanCfgs   = ChanCfgs      ( Cfg_t                         )  "
 )
 header ""
 )
@@ -1913,13 +1912,14 @@ isHidden 1
 font "Courier New,8,0"
 )
 xt "10000,17800,47500,23400"
-st "DACS_BUILD_NUMBER = X\"0044\"         ( std_logic_vector(15 DOWNTO 0) )  
-INSTRUMENT_ID     = X\"0008\"         ( std_logic_vector(15 DOWNTO 0) )  
+st "DACS_BUILD_NUMBER = X\"0002\"         ( std_logic_vector(15 DOWNTO 0) )  
+INSTRUMENT_ID     = X\"0007\"         ( std_logic_vector(15 DOWNTO 0) )  
 N_INTERRUPTS      = N_INTERRUPTS    ( integer range 15 downto 0     )  
 N_BOARDS          = N_BOARDS        ( integer range 15 downto 0     )  
 ADDR_WIDTH        = ADDR_WIDTH      ( integer range 16 downto 8     )  
-INTA_ADDR         = X\"0004\"         ( std_logic_vector(15 DOWNTO 0) )  
-BDID_ADDR         = X\"0002\"         ( std_logic_vector(15 DOWNTO 0) )  "
+INTA_ADDR         = X\"0001\"         ( std_logic_vector(15 DOWNTO 0) )  
+BDID_ADDR         = X\"0002\"         ( std_logic_vector(15 DOWNTO 0) )  
+"
 )
 header ""
 )
@@ -1927,12 +1927,12 @@ elements [
 (GiElement
 name "DACS_BUILD_NUMBER"
 type "std_logic_vector(15 DOWNTO 0)"
-value "X\"0044\""
+value "X\"0002\""
 )
 (GiElement
 name "INSTRUMENT_ID"
 type "std_logic_vector(15 DOWNTO 0)"
-value "X\"0008\""
+value "X\"0007\""
 )
 (GiElement
 name "N_INTERRUPTS"
@@ -1952,7 +1952,7 @@ value "ADDR_WIDTH"
 (GiElement
 name "INTA_ADDR"
 type "std_logic_vector(15 DOWNTO 0)"
-value "X\"0004\""
+value "X\"0001\""
 )
 (GiElement
 name "BDID_ADDR"
@@ -3818,12 +3818,12 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "1455,300,2730,1087"
-viewArea "-972,-972,87409,52546"
+windowSize "1455,300,2731,1087"
+viewArea "-1000,-1000,87032,52256"
 cachedDiagramExtent "0,0,78000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "0,0"
-lastUid 678,0
+lastUid 709,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
