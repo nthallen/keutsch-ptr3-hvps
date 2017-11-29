@@ -15,42 +15,51 @@
 
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
-USE ieee.std_logic_arith.all;
-USE ieee.std_logic_unsigned.all;
+USE ieee.numeric_std.all;
+LIBRARY PTR3_HVPS_lib;
+USE PTR3_HVPS_lib.HVPS_cfg.all;
 
 ENTITY HVPS_acq IS
-   GENERIC( 
-      ADDR_WIDTH : integer range 16 downto 8 := 16;
-      WORD_SIZE  : integer                   := 16;
-      N_CHANNELS : integer                   := 14
-      --CHANCFGBITS : integer                  := 9
-   );
-   PORT( 
-      ChanAddr2 : IN     std_logic_vector (3 DOWNTO 0);
-      Done      : IN     std_logic;
-      Err       : IN     std_logic;
-      WrEn2     : IN     std_logic;
-      WrRdy1    : IN     std_logic;
-      clk       : IN     std_ulogic;
-      i2c_rdata : IN     std_logic_vector (7 DOWNTO 0);
-      rst       : IN     std_ulogic;
-      wData2    : IN     std_logic_vector (15 DOWNTO 0);
-      Rd        : OUT    std_logic;
-      Start     : OUT    std_logic;
-      Stop      : OUT    std_logic;
-      Wr        : OUT    std_logic;
-      WrAck2    : OUT    std_logic;
-      WrAddr1   : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
-      WrEn1     : OUT    std_logic;
-      i2c_wdata : OUT    std_logic_vector (7 DOWNTO 0);
-      wData1    : OUT    std_logic_vector (15 DOWNTO 0);
-      RdStat    : IN     std_logic;
-      Timeout   : IN     std_logic
-   );
+  GENERIC( 
+    ADDR_WIDTH : integer range 16 downto 8 := 16;
+    WORD_SIZE  : integer                   := 16;
+    N_CHANNELS : integer                   := 14;
+    ChanCfgs   : Cfg_t                     := (
+          "000000000", "000000010", "001000100", "010000111",
+          "011001000", "011001011",
+          "100010001",
+          "011011000", "011011011",
+          "100100001",
+          "011101000", "011101011",
+          "100110001",
+          "100111001" )
+  );
+  PORT( 
+    ChanAddr2 : IN     std_logic_vector (3 DOWNTO 0);
+    Done      : IN     std_logic;
+    Err       : IN     std_logic;
+    WrEn2     : IN     std_logic;
+    WrRdy1    : IN     std_logic;
+    clk       : IN     std_logic;
+    i2c_rdata : IN     std_logic_vector (7 DOWNTO 0);
+    rst       : IN     std_logic;
+    wData2    : IN     std_logic_vector (15 DOWNTO 0);
+    Rd        : OUT    std_logic;
+    Start     : OUT    std_logic;
+    Stop      : OUT    std_logic;
+    Wr        : OUT    std_logic;
+    WrAck2    : OUT    std_logic;
+    WrAddr1   : OUT    std_logic_vector (ADDR_WIDTH-1 DOWNTO 0);
+    WrEn1     : OUT    std_logic;
+    i2c_wdata : OUT    std_logic_vector (7 DOWNTO 0);
+    wData1    : OUT    std_logic_vector (15 DOWNTO 0);
+    RdStat    : IN     std_logic;
+    Timeout   : IN     std_logic
+  );
 
 -- Declarations
 
-END HVPS_acq ;
+END ENTITY HVPS_acq ;
 
 --
 ARCHITECTURE fsm OF HVPS_acq IS
@@ -96,7 +105,7 @@ ARCHITECTURE fsm OF HVPS_acq IS
   SIGNAL Stat2_adc : std_logic_vector(WORD_SIZE-1 DOWNTO 0);
   SIGNAL Stat3_dac : std_logic_vector(WORD_SIZE-1 DOWNTO 0);
   SIGNAL Fresh : std_logic;
-  SIGNAL Chan : std_logic_vector(3 DOWNTO 0);
+  SIGNAL Chan : unsigned(3 DOWNTO 0);
   SIGNAL RData : std_logic_vector(15 DOWNTO 0);
   SIGNAL adc_wr_ptr : std_logic_vector(7 DOWNTO 0);
   SIGNAL adc_wr_data : std_logic_vector(15 DOWNTO 0);
@@ -104,8 +113,9 @@ ARCHITECTURE fsm OF HVPS_acq IS
   SIGNAL dac_wr_data : std_logic_vector(15 DOWNTO 0);
   SIGNAL over_thresh : std_logic_vector(N_CHANNELS-1 DOWNTO 0);
   SIGNAL mux_cfg : std_logic_vector(7 DOWNTO 0);
-  constant CHANCFGBITS : integer := 9;
-  TYPE Cfg_t is array (0 TO N_CHANNELS-1) of std_logic_vector(CHANCFGBITS-1 DOWNTO 0);
+  -- CHANCFGBITS and Cfg_t definitions are moved to HVPS_cfg_pkg.vhdl
+  -- constant CHANCFGBITS : integer := 9;
+  -- TYPE Cfg_t is array (0 TO N_CHANNELS-1) of std_logic_vector(CHANCFGBITS-1 DOWNTO 0);
   -- 8:6 => Voltage range
   --   000 => 200
   --   001 => 400
@@ -115,15 +125,6 @@ ARCHITECTURE fsm OF HVPS_acq IS
   -- 5:3 => board address
   -- 2:1 => Next 2 bits are channel address on the board
   -- 0 => LSB indicates channel is the last one on the board
-  constant ChanCfgs : Cfg_t :=
-    ( "000000000", "000000010", "001000100", "010000111",
-      "011001000", "011001011",
-      "100010001",
-      "011011000", "011011011",
-      "100100001",
-      "011101000", "011101011",
-      "100110001",
-      "100111001" );
   constant MUX_I2C_PREFIX : std_logic_vector(3 DOWNTO 0) := "1110";
   constant MUX_DISABLE : std_logic_vector(7 DOWNTO 0) := X"00";
   constant ADC_I2C_ADDR : std_logic_vector(7 DOWNTO 0) := "10010000";
@@ -156,26 +157,6 @@ ARCHITECTURE fsm OF HVPS_acq IS
   constant ADC_VOLTAGE_OFFSET : integer := 6;
   constant ADC_CURRENT_OFFSET : integer := 7;
   
-  function int2slv(val : IN integer; len : IN integer)
-  return std_logic_vector is
-    Variable bit : integer range 0 to 16;
-    Variable rval : integer range 0 to 65535;
-    Variable slv : std_logic_vector(len-1 DOWNTO 0);
-  begin
-    bit := 0;
-    rval := val;
-    slv := (others => '0');
-    while bit < len loop
-      if rval mod 2 > 0 then
-        slv(bit) := '1';
-      else
-        slv(bit) := '0';
-      end if;
-      rval := rval / 2;
-      bit := bit + 1;
-    end loop;
-    return slv;
-  end function int2slv;
 BEGIN
   FSM : PROCESS (clk) IS
     Variable ChanCfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0);
@@ -218,7 +199,7 @@ BEGIN
       nxt : IN State1_t ) IS
     BEGIN
       WrEn1 <= '1';
-      WrAddr1 <= int2slv(Addr,ADDR_WIDTH);
+      WrAddr1 <= std_logic_vector(to_unsigned(Addr,ADDR_WIDTH));
       wData1 <= wData;
       ram_nxt <= nxt;
       crnt_state1 <= S1_RAM;
@@ -310,6 +291,10 @@ BEGIN
       return  cfg(0);
     END FUNCTION mux_clr_bit;
     
+    -- hi_threshold() and lo_threshold() values are chosen to be somewhat
+    -- greater than and less than 15V, respectively, in order to provide
+    -- some hysteresis. The light will go on when the voltage is above
+    -- the hi_threshold() and go off when it goes below the lo_threshold().
     FUNCTION hi_threshold(cfg : std_logic_vector(CHANCFGBITS-1 DOWNTO 0))
         return std_logic_vector IS
       Variable thresh : std_logic_vector(15 DOWNTO 0);
@@ -320,6 +305,7 @@ BEGIN
         WHEN "010" => thresh := X"0535"; -- (-)800 Volts
         WHEN "011" => thresh := X"0215"; -- 2000 Volts
         WHEN "100" => thresh := X"0163"; -- 3000 Volts
+        WHEN "101" => thresh := X"0418"; -- (-)1000 Volts
         WHEN OTHERS => thresh := X"0000";
       END CASE;
       return thresh;
@@ -335,6 +321,7 @@ BEGIN
         WHEN "010" => thresh := X"048E"; -- (-)800 Volts
         WHEN "011" => thresh := X"01D2"; -- 2000 Volts
         WHEN "100" => thresh := X"0137"; -- 3000 Volts
+        WHEN "101" => thresh := X"0395"; -- (-)1000 Volts
         WHEN OTHERS => thresh := X"0000";
       END CASE;
       return thresh;
@@ -389,13 +376,13 @@ BEGIN
 
           -- start_mux_wr(): Write mux configuration
           WHEN S1_MUX_WR =>
-            ChanCfg := ChanCfgs(conv_integer(Chan));
+            ChanCfg := ChanCfgs(to_integer(Chan));
             start_txn('1','0','1','0',mux_addr(ChanCfg),S1_MUX_WR, S1_MUX_WR_1, S1_MUX_ERR);
           WHEN S1_MUX_WR_1 =>
             start_txn('1','0','0','1',mux_cfg,S1_MUX_WR_1, S1_MUX_WR_2, S1_MUX_ERR);
           WHEN S1_MUX_WR_2 =>
-            IF Stat1_mux(conv_integer(Chan)) = '1' THEN
-              Stat1_mux(conv_integer(Chan)) <= '0';
+            IF Stat1_mux(to_integer(Chan)) = '1' THEN
+              Stat1_mux(to_integer(Chan)) <= '0';
               crnt_state1 <= S1_MUX_WR_3;
             ELSE
               crnt_state1 <= mux_nxt;
@@ -435,8 +422,8 @@ BEGIN
             start_txn('0','1','0','1',X"00",S1_ADC_RD_9,S1_ADC_RD_10,S1_ADC_ERR);
           WHEN S1_ADC_RD_10 =>
             RData(7 DOWNTO 0) <= i2c_rdata;
-            IF (Stat2_adc(conv_integer(Chan)) = '1') THEN
-              Stat2_adc(conv_integer(Chan)) <= '0';
+            IF (Stat2_adc(to_integer(Chan)) = '1') THEN
+              Stat2_adc(to_integer(Chan)) <= '0';
               crnt_state1 <= S1_ADC_RD_11;
             ELSE
               crnt_state1 <= adc_nxt;
@@ -478,8 +465,8 @@ BEGIN
             start_txn('0','1','0','1',X"00",S1_DAC_RD_2,S1_DAC_RD_3,S1_DAC_ERR);
           WHEN S1_DAC_RD_3 =>
             RData(7 DOWNTO 0) <= i2c_rdata;
-            IF (Stat3_dac(conv_integer(Chan)) = '1') THEN
-              Stat3_dac(conv_integer(Chan)) <= '0';
+            IF (Stat3_dac(to_integer(Chan)) = '1') THEN
+              Stat3_dac(to_integer(Chan)) <= '0';
               crnt_state1 <= S1_DAC_RD_4;
             ELSE
               crnt_state1 <= dac_nxt;
@@ -489,14 +476,14 @@ BEGIN
           
           -- chan_loop_iterate(): End of loop subroutine (since there are two loops)
           WHEN S1_LOOP_ITER =>
-            ChanCfg := ChanCfgs(conv_integer(Chan));
-            IF mux_clr_bit(ChanCfg) = '1' AND Stat1_mux(conv_integer(Chan)) = '0' THEN
+            ChanCfg := ChanCfgs(to_integer(Chan));
+            IF mux_clr_bit(ChanCfg) = '1' AND Stat1_mux(to_integer(Chan)) = '0' THEN
               start_mux_wr(MUX_DISABLE, S1_LOOP_ITER_1);
             ELSE
               crnt_state1 <= S1_LOOP_ITER_1;
             END IF;
           WHEN S1_LOOP_ITER_1 =>
-            IF conv_integer(Chan) = N_CHANNELS-1 THEN
+            IF to_integer(Chan) = N_CHANNELS-1 THEN
               Chan <= (others => '0');
               crnt_state1 <= loop_end_nxt;
             ELSE
@@ -508,8 +495,8 @@ BEGIN
           -- Set bit in the Stat1_mux and write to RAM
           -- Go to err_recovery_nxt
           WHEN S1_MUX_ERR =>
-            IF Stat1_mux(conv_integer(Chan)) = '0' THEN
-              Stat1_mux(conv_integer(Chan)) <= '1';
+            IF Stat1_mux(to_integer(Chan)) = '0' THEN
+              Stat1_mux(to_integer(Chan)) <= '1';
               crnt_state1 <= S1_MUX_ERR_1;
             ELSE
               crnt_state1 <= S1_MUX_ERR_2;
@@ -517,8 +504,8 @@ BEGIN
           WHEN S1_MUX_ERR_1 =>
             start_ram(1,Stat1_mux,S1_MUX_ERR_2);
           WHEN S1_MUX_ERR_2 =>
-            IF Stat0_init(conv_integer(Chan)) = '1' THEN
-              Stat0_init(conv_integer(Chan)) <= '0';
+            IF Stat0_init(to_integer(Chan)) = '1' THEN
+              Stat0_init(to_integer(Chan)) <= '0';
               crnt_state1 <= S1_MUX_ERR_3;
             ELSE
               crnt_state1 <= err_recovery_nxt;
@@ -530,7 +517,7 @@ BEGIN
           -- Set bit in the Stat2_adc and write to RAM
           -- Go to err_recovery_nxt
           WHEN S1_ADC_ERR =>
-            Stat2_adc(conv_integer(Chan)) <= '1';
+            Stat2_adc(to_integer(Chan)) <= '1';
             crnt_state1 <= S1_ADC_ERR_1;
           WHEN S1_ADC_ERR_1 =>
             start_ram(2,Stat2_adc,err_recovery_nxt);
@@ -539,7 +526,7 @@ BEGIN
           -- Set bit in the Stat2_adc and write to RAM
           -- Go to err_recovery_nxt
           WHEN S1_DAC_ERR =>
-            Stat3_dac(conv_integer(Chan)) <= '1';
+            Stat3_dac(to_integer(Chan)) <= '1';
             crnt_state1 <= S1_DAC_ERR_1;
           WHEN S1_DAC_ERR_1 =>
             start_ram(3,Stat3_dac,err_recovery_nxt);
@@ -574,16 +561,16 @@ BEGIN
             END IF;
           WHEN S1_LOOP_1 =>
             err_recovery_nxt <= S1_LOOP_3;
-            ChanCfg := ChanCfgs(conv_integer(Chan));
+            ChanCfg := ChanCfgs(to_integer(Chan));
             start_mux_wr(mux_bit(ChanCfg), S1_LOOP_2);
           WHEN S1_LOOP_2 =>
-            IF Stat0_init(conv_integer(Chan)) = '0' THEN
+            IF Stat0_init(to_integer(Chan)) = '0' THEN
               crnt_state1 <= S1_LOOP_INIT;
             ELSE
               crnt_state1 <= S1_LOOP_ADCIRD;
             END IF;
           WHEN S1_LOOP_3 =>
-            IF WrEn2 = '1' AND ChanAddr2 = Chan THEN
+            IF WrEn2 = '1' AND unsigned(ChanAddr2) = Chan THEN
               -- Discard write to disabled channel
               WrAck2 <= '1';
             END IF;
@@ -591,10 +578,10 @@ BEGIN
             
           WHEN S1_LOOP_INIT => -- Initialize Channel
             err_recovery_nxt <= S1_LOOP_INIT_2; -- skip to DAC
-            ChanCfg := ChanCfgs(conv_integer(Chan));
+            ChanCfg := ChanCfgs(to_integer(Chan));
             start_adc_wr(LO_THRESH_PTR, lo_threshold(ChanCfg), S1_LOOP_INIT_1);
           WHEN S1_LOOP_INIT_1 =>
-            ChanCfg := ChanCfgs(conv_integer(Chan));
+            ChanCfg := ChanCfgs(to_integer(Chan));
             start_adc_wr(HI_THRESH_PTR, hi_threshold(ChanCfg), S1_LOOP_INIT_2);
               
           -- Configure DAC if necessary, but defaults look good
@@ -605,8 +592,8 @@ BEGIN
           WHEN S1_LOOP_INIT_2A =>
             start_dac_wr(DAC_WR_IO, X"0000", S1_LOOP_INIT_3);
           WHEN S1_LOOP_INIT_3 =>
-            Stat0_init(conv_integer(Chan)) <= '1';
-            start_ram(conv_integer(Chan)*4+DAC_SETPOINT_OFFSET,X"0000",S1_LOOP_INIT_4);
+            Stat0_init(to_integer(Chan)) <= '1';
+            start_ram(to_integer(Chan)*4+DAC_SETPOINT_OFFSET,X"0000",S1_LOOP_INIT_4);
           WHEN S1_LOOP_INIT_4 =>
             start_ram(0,Stat0_init,S1_LOOP_ADCVCFG);
 
@@ -614,11 +601,11 @@ BEGIN
             err_recovery_nxt <= S1_LOOP_DAC;
             start_adc_rd(S1_LOOP_ADCIWR);
           WHEN S1_LOOP_ADCIWR => -- And write current to ram
-            start_ram(conv_integer(Chan)*4+ADC_CURRENT_OFFSET,RData,S1_LOOP_ADCVCFG);
+            start_ram(to_integer(Chan)*4+ADC_CURRENT_OFFSET,RData,S1_LOOP_ADCVCFG);
             
           WHEN S1_LOOP_ADCVCFG => -- Configure Channel Voltage reading
             err_recovery_nxt <= S1_LOOP_DAC;
-            IF (over_thresh(conv_integer(Chan)) = '1') THEN
+            IF (over_thresh(to_integer(Chan)) = '1') THEN
               adc_led_cfg := ADC_LED_ON;
             ELSE
               adc_led_cfg := ADC_LED_OFF;
@@ -626,7 +613,7 @@ BEGIN
             start_adc_wr(ADC_CFG_PTR, ADC_VOLTAGE_CFG & adc_led_cfg, S1_LOOP_DAC);
           WHEN S1_LOOP_DAC =>
             err_recovery_nxt <= S1_LOOP1_ITER;
-            IF WrEn2 = '1' AND ChanAddr2 = Chan THEN
+            IF WrEn2 = '1' AND unsigned(ChanAddr2) = Chan THEN
               WrAck2 <= '1';
               start_dac_wr(DAC_WR_IO, WData2, S1_LOOP_DAC_1);
             ELSE
@@ -634,31 +621,31 @@ BEGIN
             END IF;
           WHEN S1_LOOP_DAC_1 =>
             WrAck2 <= '0';
-            start_ram(conv_integer(Chan)*4+DAC_SETPOINT_OFFSET,WData2,S1_LOOP1_ITER);
+            start_ram(to_integer(Chan)*4+DAC_SETPOINT_OFFSET,WData2,S1_LOOP1_ITER);
           WHEN S1_LOOP_DAC_2 =>
-            start_ram(conv_integer(Chan)*4+DAC_READBACK_OFFSET,RData,S1_LOOP1_ITER);
+            start_ram(to_integer(Chan)*4+DAC_READBACK_OFFSET,RData,S1_LOOP1_ITER);
           WHEN S1_LOOP1_ITER =>
             WrAck2 <= '0';
             chan_loop_iterate(S1_LOOP_1, S1_LOOP2_INIT);
             
           WHEN S1_LOOP2_INIT =>
             err_recovery_nxt <= S1_LOOP2_ITER;
-            ChanCfg := ChanCfgs(conv_integer(Chan));
+            ChanCfg := ChanCfgs(to_integer(Chan));
             start_mux_wr(mux_bit(ChanCfg), S1_LOOP_ADCVRD);
           WHEN S1_LOOP_ADCVRD => -- Read latest converted value
             start_adc_rd(S1_LOOP_ADCVWR);
           WHEN S1_LOOP_ADCVWR => -- And write current to ram
-            ChanCfg := ChanCfgs(conv_integer(Chan));
-            IF (over_thresh(conv_integer(Chan)) = '0') THEN
+            ChanCfg := ChanCfgs(to_integer(Chan));
+            IF (over_thresh(to_integer(Chan)) = '0') THEN
               IF (RData > hi_threshold(ChanCfg)) THEN
-                over_thresh(conv_integer(Chan)) <= '1';
+                over_thresh(to_integer(Chan)) <= '1';
               END IF;
             ELSIF (RData < lo_threshold(ChanCfg)) THEN
-              over_thresh(conv_integer(Chan)) <= '0';
+              over_thresh(to_integer(Chan)) <= '0';
             END IF;
-            start_ram(conv_integer(Chan)*4+ADC_VOLTAGE_OFFSET,RData,S1_LOOP_ADCICFG);
+            start_ram(to_integer(Chan)*4+ADC_VOLTAGE_OFFSET,RData,S1_LOOP_ADCICFG);
           WHEN S1_LOOP_ADCICFG => -- Configure Channel Current reading
-            IF (over_thresh(conv_integer(Chan)) = '1') THEN
+            IF (over_thresh(to_integer(Chan)) = '1') THEN
               adc_led_cfg := ADC_LED_ON;
             ELSE
               adc_led_cfg := ADC_LED_OFF;
