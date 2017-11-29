@@ -17,26 +17,13 @@ USE PTR3_HVPS_lib.HVPS_cfg.all;
 
 ENTITY HVPS_R2 IS
     GENERIC (
-      ADDR_WIDTH   : integer                   := 8;
-      N_CHANNELS   : integer                   := 4;
-        -- 8:6 => Voltage range
-        --   000 => 200
-        --   001 => 400
-        --   010 => (-)800
-        --   011 => 2000
-        --   100 => 3000
-        --   101 => (-)1000
-        -- 5:3 => board address
-        -- 2:1 => Next 2 bits are channel address on the board
-        -- 0 => LSB indicates channel is the last one on the board
-      ChanCfgs     : PTR3_HVPS_lib.HVPS_cfg.Cfg_t := ("101000000", "101000010", "101000100", "101000111")
+      ADDR_WIDTH   : integer                   := 8
     );
     PORT (
       clk              : IN     std_logic;
       subbus_addr      : IN     std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
       subbus_ctrl      : IN     std_logic_vector(6 DOWNTO 0);
       subbus_data_o    : IN     std_logic_vector(15 DOWNTO 0);
-      subbus_fail_in   : IN     std_logic;
       Flt_CPU_Reset    : OUT    std_logic;
       subbus_collision : OUT    std_logic;
       subbus_data_i    : OUT    std_logic_vector(15 DOWNTO 0);
@@ -80,15 +67,25 @@ BEGIN
       N_INTERRUPTS => 0,
       N_BOARDS     => 1,
       ADDR_WIDTH   => ADDR_WIDTH,
-      N_CHANNELS   => N_CHANNELS,
-      ChanCfgs     => ChanCfgs
+      N_CHANNELS   => 8,
+      ChanCfgs     => ("101000000", "101000010", "101000100", "101000111")
+        -- 8:6 => Voltage range
+        --   000 => 200
+        --   001 => 400
+        --   010 => (-)800
+        --   011 => 2000
+        --   100 => 3000
+        --   101 => (-)1000
+        -- 5:3 => board address
+        -- 2:1 => Next 2 bits are channel address on the board
+        -- 0 => LSB indicates channel is the last one on the board
     )
     PORT MAP (
       clk              => clk,
       subbus_addr      => subbus_addr,
       subbus_ctrl      => subbus_ctrl,
       subbus_data_o    => subbus_data_o,
-      subbus_fail_in   => subbus_fail_in,
+      subbus_fail_in   => '0',
       Flt_CPU_Reset    => Flt_CPU_Reset,
       subbus_collision => subbus_collision,
       subbus_data_i    => subbus_data_i,

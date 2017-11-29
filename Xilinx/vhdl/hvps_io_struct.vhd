@@ -70,7 +70,7 @@ ARCHITECTURE struct OF HVPS_IO IS
   -- Architecture declarations
 
   -- Internal signal declarations
-  SIGNAL BdIntr   : std_ulogic_vector(N_INTERRUPTS-1 DOWNTO 0);
+  SIGNAL BdIntr   : std_logic_vector(N_INTERRUPTS-1 DOWNTO 0);
   SIGNAL ExpAck   : std_logic_vector(N_BOARDS-1 DOWNTO 0);
   SIGNAL ExpAddr  : std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
   SIGNAL ExpRd    : std_logic;
