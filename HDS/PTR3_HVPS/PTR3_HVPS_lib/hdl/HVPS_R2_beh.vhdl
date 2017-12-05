@@ -17,20 +17,7 @@ USE PTR3_HVPS_lib.HVPS_cfg.all;
 
 ENTITY HVPS_R2 IS
     GENERIC (
-      ADDR_WIDTH   : integer                   := 8;
-      N_CHANNELS   : integer                   := 4;
-        -- 8:6 => Voltage range
-        --   000 => 200
-        --   001 => 400
-        --   010 => (-)800
-        --   011 => 2000
-        --   100 => 3000
-        --   101 => (-)1000
-        -- 5:3 => board address
-        -- 2:1 => Next 2 bits are channel address on the board
-        -- 0 => LSB indicates channel is the last one on the board
-      ChanCfgs     : Cfg_t                     := (
-        "101000000", "101000010", "101000100", "101000111")
+      ADDR_WIDTH   : integer                   := 8
     );
     PORT (
       clk              : IN     std_logic;
@@ -56,7 +43,7 @@ ARCHITECTURE beh OF HVPS_R2 IS
       N_BOARDS     : integer range 15 downto 0 := 1;
       ADDR_WIDTH   : integer                   := 8;
       N_CHANNELS   : integer                   := 14;
-      ChanCfgs     : Cfg_t                     := ( "000000000", "000000010", "001000100", "010000111", "011001000", "011001011", "100010001", "011011000", "011011011", "100100001", "011101000", "011101011", "100110001", "100111001" )
+      ChanCfgs     : PTR3_HVPS_lib.HVPS_cfg.Cfg_t := ("000000000", "000000010", "001000100", "010000111", "011001000", "011001011", "100010001", "011011000", "011011011", "100100001", "011101000", "011101011", "100110001", "100111001")
     );
     PORT (
       clk              : IN     std_logic;
@@ -81,8 +68,18 @@ BEGIN
       N_INTERRUPTS => 0,
       N_BOARDS     => 1,
       ADDR_WIDTH   => ADDR_WIDTH,
-      N_CHANNELS   => N_CHANNELS,
-      ChanCfgs     => ChanCfgs
+      N_CHANNELS   => 4,
+      ChanCfgs     => ("101000000", "101000010", "101000100", "101000111")
+        -- 8:6 => Voltage range
+        --   000 => 200
+        --   001 => 400
+        --   010 => (-)800
+        --   011 => 2000
+        --   100 => 3000
+        --   101 => (-)1000
+        -- 5:3 => board address
+        -- 2:1 => Next 2 bits are channel address on the board
+        -- 0 => LSB indicates channel is the last one on the board
     )
     PORT MAP (
       clk              => clk,

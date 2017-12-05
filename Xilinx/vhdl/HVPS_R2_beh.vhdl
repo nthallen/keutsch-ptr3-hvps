@@ -68,7 +68,7 @@ BEGIN
       N_INTERRUPTS => 0,
       N_BOARDS     => 1,
       ADDR_WIDTH   => ADDR_WIDTH,
-      N_CHANNELS   => 8,
+      N_CHANNELS   => 4,
       ChanCfgs     => ("101000000", "101000010", "101000100", "101000111")
         -- 8:6 => Voltage range
         --   000 => 200
